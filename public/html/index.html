@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mask Radio</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel='icon' href='images/favicon.png' type='image/png'/>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Mask Radio</a>
+          </div>
+          <div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+              <ul class="nav navbar-nav">
+                <li class="nav-item"><img width="50px" height="50px" src="images/signal.png"/></li>
+                <li><a href="#section1">Home</a></li>
+                <li><a href="#section2">Chat</a></li>
+                <li><a href="#section3">Send Song</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li><a><span class="glyphicon glyphicon-time"></span> Timer</a></li>
+                <li><a><label id="hours">00</label>:<label id="minutes">00</label>:<label id="seconds">00</label></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="content">
+        <audio controls src="https://stream.zenolive.com/dz9z5w7u5yzuv.aac"></audio>
+      </div>
+
+      <div id="section1" class="container">
+        <div class="center">
+          <h1>Καλωσορίσατε στο <b>Mask Radio </b></h1>
+          <p>Ελπίζουμε να σας ταξιδέψουμε με τις μελωδίες μας και να γίνουμε μια όμορφη παρέα!</p>
+          <p>Μπορείτε να στείλετε τα τραγούδια σας απο την <b><a href="#section3">ειδική φόρμα αποστολής τραγουδιών</a></b>.</p>
+          <br>
+          <center>
+            <a id="facebook" href="https://www.facebook.com/Mask-Radio-105310681185250/" class="fa fa-facebook" target="_blank"></a>
+            <a id="instagram" href="https://www.instagram.com/maskradiogreece/" class="fa fa-instagram" target="_blank"></a>
+          </center>
+        </div>
+      </div>
+
+
+      <div id="section2" class="container-fluid">
+        <center>
+          <iframe id="frame" src="https://minnit.chat/FourierChat?embed&nickname=" style="border:none;" allowTransparency="true"></iframe><br>
+        </center>
+      </div>
+
+
+      <div id="section3" class="container-fluid" >
+        <div class="vertical-center">
+          <center>
+            <form action="#" id="songForm">
+              <div class="form-group">
+                <label for="song">Song:</label>
+                <input id="songField" name="song" type="text" required  id="song" placeholder="Enter the song you want to hear">
+              </div>
+              <div class="form-group">
+                <label for="dedicate">Dedicate:</label>
+                <input id="forField" name="dedicate" type="text" placeholder="Dedicate to someone?">
+              </div>
+              <button type="submit" class="btn btn-info btn-lg">
+                <span class="glyphicon glyphicon-send"></span> Send
+              </button>
+            </form>
+            <br>
+            <div id=notify>
+            </div>
+          </center>
+        </div>
+      </div>
+      <div class="signarute">
+        <b><a href='https://www.facebook.com/vmpletsos' class="link" target="_blank"><span class="glyphicon glyphicon-flash"></span> by Vmpletsos</a></b>
+      </div>
+      <div id="space" class="container-fluid">
+      </div>
+      <script src="js/song.js"></script>
+    </body>
+  <script src="js/snow.js"></script>
+  <script src="js/size.js"></script>
+  <script src="js/rotate.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/cookie.js"></script>
+</html>
