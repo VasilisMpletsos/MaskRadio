@@ -18,3 +18,5 @@ To do:
 4. Shape form better according to resolution of screen!
 5. Auto load song when send and add it to a playlist!
 6. Change color according to music!
+
+Contributor: https://github.com/ZiposC
