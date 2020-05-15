@@ -74,8 +74,6 @@ input[type]{
 }
 
 form{
-  padding-top: 100px;
-  padding-bottom: 100px;
   border-radius: 20px;
   background-color: #4c67b780;
   border-color: #e7e08885;
@@ -94,13 +92,13 @@ form{
   border-radius: 10px;
 }
 
-.signarute{
+.github{
   position: fixed;
   bottom: 0;
   right: 0;
   width: 100px;
   text-align:right;
-  font-style: italic;
+  font-style: normal;
   margin-right: 10px;
   margin-bottom: 3px;
 }
@@ -174,4 +172,10 @@ a.fa:visited{
 
 .glyphicon-flash{
   color: #0072ff;
+}
+
+.dropdown-menu{
+  text-align: left;
+  padding-left: 30%;
+  background-color: #222222c9;
 }
