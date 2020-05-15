@@ -1,2 +1,12 @@
 # MaskRadio
-A Node Js server to host my radio to have fun with friends and spend some time in Covid-19 Carantine. Also all files like Html javascript css are included.
+A Node Js server to host my radio, have fun with my friends and spend some time in Covid-19 Carantine. Also all files:
+-HTML
+-CSS
+-JS
+-Server Js
+
+Are included
+
+Fixes:
+->Better Navbar
+->Safety Implementation
