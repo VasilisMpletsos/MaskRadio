@@ -10,3 +10,11 @@ Are included
 Fixes:
 ->Better Navbar
 ->Safety Implementation
+
+To do:
+1. Add better Limiter
+2. Go HTTPS (certificate)?
+3. Count Connected Users
+4. Shape form better according to resolution of screen!
+5. Auto load song when send and add it to a playlist!
+6. Change color according to music!
