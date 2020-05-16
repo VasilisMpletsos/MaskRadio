@@ -1,14 +1,17 @@
 var i = 0;
 var j = 0;
+var ended = 'false';
 var txt = 'Enter a song you want to hear!'; /* The text */
 var txt2 = 'Dedicate to someone?'; /* The text */
-var speed = 50; /* The speed/duration of the effect in milliseconds */
+var speed = 65; /* The speed/duration of the effect in milliseconds */
 
-function typeSong() {
+function typeSong(_callback) {
   if (i < txt.length) {
     document.getElementById("songField").placeholder += txt.charAt(i);
     i++;
     setTimeout(typeSong, speed);
+  }else{
+    ended='true'
   }
 }
 
@@ -20,5 +23,21 @@ function typeFor() {
   }
 }
 
-typeSong();
-typeFor();
+function runTyping(){
+  typeSong();
+  function wait(){
+      if(ended==='false'){
+        setTimeout(wait, 100);
+        console.log('Waiting')
+      }else{
+        typeFor();
+      }
+  }
+  wait();
+}
+
+function waitPosition(){
+  document.getElementById("section3").addEventListener("mouseover", runTyping);
+}
+
+waitPosition();
