@@ -14,8 +14,8 @@ Fixes:
 To do:
 1. Go HTTPS (certificate)?
 2. Count Connected Users
-3. Add youtube search API to song and when click something set value to link ot title?
+3. Add youtube search API to song and when click something set value to link or title?
 4. Auto load song when send and add it to a playlist!
-5. Change color according to music!
+
 
 Contributor: https://github.com/ZiposC
