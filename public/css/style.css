@@ -74,7 +74,7 @@ input[type]{
 }
 
 form{
-  border-radius: 20px;
+  border-radius: 40px;
   background-color: #4c67b780;
   border-color: #e7e08885;
   border-width: 2px;
@@ -85,7 +85,7 @@ form{
 .vertical-center {
   margin: 0;
   position: relative;
-  top: 25%;
+  top: 15%;
 }
 
 .alert-success{
