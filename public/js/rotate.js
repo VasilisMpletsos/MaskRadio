@@ -1,10 +1,5 @@
-var facebook = document.querySelector('.fa-facebook');
-var instagram = document.querySelector('.fa-instagram');
+var socialMedia = document.querySelector('.fa');
 
-facebook.addEventListener('click',()=>{
+socialMedia.addEventListener('mouseover',()=>{
     facebook.style.transform = "rotate(360deg)";
-})
-
-instagram.addEventListener('click',()=>{
-    instagram.style.transform = "rotate(360deg)";
 })
