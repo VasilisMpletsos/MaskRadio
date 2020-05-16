@@ -19,6 +19,7 @@ class SongsRepository{
   }
 
   async create(attrs){
+    // Only appending instead of recreating
     const songs = await this.getAll();
     const song = {
       ...attrs
