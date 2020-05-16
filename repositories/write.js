@@ -25,6 +25,7 @@ class SongsRepository{
     };
     songs.push(song);
 
+    //write all
     await this.writeAll(songs);
     return song;
   }
