@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const songsRepo = require('./repositories/write');
+const usersRepo = require('./repositories/count');
 const parasitesRepo = require('./repositories/parasite');
 const fs = require('fs');
 const Ddos = require('ddos')
@@ -29,13 +30,13 @@ const app = express();
 app.use(helmet());
 
 //Protecting against ddos attacks
-var ddos = new Ddos({burst:10, limit:15})
+var ddos = new Ddos({burst:50, limit:100})
 app.use(ddos.express);
 
 //Limiting Requests
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 200, // limit each IP to 200 requests per windowMs
+  max: 1000, // limit each IP to 1000 requests per windowMs
   message:"Too many attempts from this IP, please try again after 10 minutes"
 });
 app.use(limiter);
@@ -68,6 +69,15 @@ app.get('/maskRadio',async function(req, res) {
 app.post('/maskRadio',async (req,res) => {
   const {song,dedicate,listener} = req.body;
   await songsRepo.create({song: song, for: dedicate, listener: listener});
+});
+
+app.post('/count',async (req,res) => {
+  const {parasite} = req.body;
+  const flag = await usersRepo.checkUser(parasite);
+  console.log(flag);
+  if(flag){
+      await usersRepo.create({user: parasite});
+  }
 });
 
 app.get('/parasite',async(req,res)=>{
