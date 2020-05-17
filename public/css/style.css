@@ -67,9 +67,10 @@ html {
 
 input[type]{
   border-radius: 20px;
-  width: calc(30% - 10px);
+  width: calc(40% + 100px);
   padding: 12px 20px;
-  margin: 8px 0;
+  margin: auto;
+  text-align: center;
   color: black;
   box-sizing: border-box;
 }
@@ -79,6 +80,7 @@ form{
   background-color: #4c67b780;
   border-color: #e7e08885;
   border-width: 2px;
+  align-items: center;
   border-style: dotted;
   backdrop-filter: blur(4px);
 }
