@@ -1,10 +1,10 @@
 $('#songForm').submit(function (e) {
   e.preventDefault();
-  addNotify();
-  postToSite();
+  notifyUser();
+  searchSong();
 });
 
-function addNotify(){
+function notifyUser(){
   const song = document.getElementById('songField');
   const forLove = document.getElementById('forField');
   const add = document.getElementById('notify');
@@ -39,16 +39,16 @@ function getCookie(cname) {
   return "";
 }
 
-function postToSite() {
+function searchSong() {
   const song = $('#songField').val();
-  const dedicate = $('#forField').val()
-  console.log(song,dedicate);
+  const dedicate = $('#forField').val();
+
   $.ajax({
     method: "POST",
-    url: '/maskRadio',
+    url: '/maskRadio/search',
     data: {song:song, dedicate: dedicate, listener: getCookie("username")},
-    success: function(){
-      console.log('Success');
+    success: data => {
+      console.log(`Success, data : ${data}`);
     }
   });
   return false;

@@ -8,6 +8,16 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cors = require("cors");
 const compression = require("compression");
+
+const utilities = require('./repositories/utilities');
+const Playlist = require('./repositories/playlist');
+
+const {google} = require('googleapis');
+const youtube = google.youtube({
+  version: 'v3',
+  auth: 'AIzaSyAYWRXvtfSaZKPLhu0T9ZaZ4fkbr-Aw5RQ'
+});
+
 // For Testing purposes only
 // const morgan = require("morgan");
 
@@ -64,11 +74,39 @@ app.get('/maskRadio',async function(req, res) {
   await res.sendFile(__dirname + '/public/html/index.html');
 });
 
+// Create the playlist of the day
+var playlist = new Playlist('Default', utilities.getDate());
+
 //Post Song
-app.post('/maskRadio',async (req,res) => {
+app.post('/maskRadio/search',async (req,res) => {
   const {song,dedicate,listener} = req.body;
   console.log(`---> We have to play [${song}] for [${dedicate}]`)
-  await songsRepo.create({song: song, for: dedicate, listener: listener});
+  //await songsRepo.create({song: song, for: dedicate, listener: listener});
+
+  // Search on youtube for the requested song.
+  youtube.search.list({
+    'q': `${song}`,
+    'part': 'snippet',
+    'type': 'video',
+    'videoEmbeddable': true,
+    'maxResults': 10
+  }).then(res => {
+    // For each video returned, get it's title and thumbnail and add it to the array
+    var songInfo = [];
+    res.data.items.forEach((song, indx) => {
+      songInfo.push({
+        'title': `${utilities.parseHTML(song['snippet']['title'])}`,
+        'thumbnail': `${song['snippet']['thumbnails']['high']['url']}`
+      });
+    });
+    return;
+  }).catch(err => {
+    console.log(err);
+  });
+
+  // Add the song
+  playlist.addSong(song);
+  console.log(playlist.songs);
 });
 
 app.get('/parasite',async(req,res)=>{
