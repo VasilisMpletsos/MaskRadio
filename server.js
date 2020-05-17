@@ -67,7 +67,6 @@ app.get('/maskRadio',async function(req, res) {
 //Post Song
 app.post('/maskRadio',async (req,res) => {
   const {song,dedicate,listener} = req.body;
-  console.log(`---> We have to play [${song}] for [${dedicate}]`);
   await songsRepo.create({song: song, for: dedicate, listener: listener});
 });
 
