@@ -74,34 +74,22 @@ app.get('/maskRadio',async function(req, res) {
   await res.sendFile(__dirname + '/public/html/index.html');
 });
 
+// Search youtube based on song title
+app.post('/maskRadio/search',async (req,res) => {
+  const {song} = req.body;
+  songsData = await searchYT(song);
+  res.send(songsData);
+});
+
 // Create the playlist of the day
 var playlist = new Playlist('Default', utilities.getDate());
 
-//Post Song
-app.post('/maskRadio/search',async (req,res) => {
+// Add the selected song to the playlist
+app.post('/maskRadio/addToPlaylist',async (req,res) => {
   const {song,dedicate,listener} = req.body;
   console.log(`---> We have to play [${song}] for [${dedicate}]`)
-  //await songsRepo.create({song: song, for: dedicate, listener: listener});
 
-  // Search on youtube for the requested song.
-  searchResults = await youtube.search.list({
-    'q': `${song}`,
-    'part': 'snippet',
-    'type': 'video',
-    'videoEmbeddable': true,
-    'maxResults': 10
-  }).catch(err => {
-    console.log(err);
-  });
-  // For each video returned, get it's title and thumbnail and add it to the array
-  var songs = searchResults.data.items;
-  var songData = [];
-  songs.forEach((song, indx) => {
-    songData.push({
-      'title': `${utilities.parseHTML(song['snippet']['title'])}`,
-      'thumbnail': `${song['snippet']['thumbnails']['high']['url']}`
-    });
-  });
+  // await songsRepo.create({song: song, for: dedicate, listener: listener});
 
   // Add the song
   playlist.addSong(song);
@@ -123,3 +111,28 @@ app.post('/parasite',async(req,res)=>{
 
 //Listen to port 3000
 app.listen(port);
+
+async function searchYT(song) {
+  // Search on youtube for the requested song.
+  searchResults = await youtube.search.list({
+    'q': `${song}`,
+    'part': 'snippet',
+    'fields': 'items(id,snippet(title,thumbnails))',
+    'type': 'video',
+    'videoEmbeddable': true,
+    'maxResults': 5
+  }).catch(err => {
+    console.log(err);
+  });
+
+  // For each video returned, get it's title and thumbnail and add it to the array
+  var songs = searchResults.data.items;
+  var songsData = [];
+  songs.forEach((song, indx) => {
+    songsData.push({
+      'title': `${utilities.parseHTML(song['snippet']['title'])}`,
+      'thumbnail': `${song['snippet']['thumbnails']['high']['url']}`
+    });
+  });
+  return songsData;
+}
