@@ -64,10 +64,26 @@
       </div>
 
 
-      <div id="section3" class="container-fluid" >
+      <div id="section3" class="container-fluid " >
         <div class="vertical-center">
           <center>
-            <form action="#" id="songForm">
+            <form action="#" id="songForm" class="hidden-xs">
+              <div class="form-group">
+                <label for="song">Song <span class="glyphicon glyphicon-music"></span></label>
+                <br>
+                <input id="songField" name="song" width="100" type="text" required>
+              </div>
+              <div class="form-group">
+                <label for="dedicate">Dedicate <span class="glyphicon glyphicon-heart"></span></label>
+                <br>
+                <input id="forField" name="dedicate" type="text">
+              </div>
+              <button type="submit" class="btn btn-info btn-lg">
+                <span class="glyphicon glyphicon-send"></span> Send
+              </button>
+            </form>
+
+            <form action="#" id="songForm" class="visible-xs">
               <div class="form-group">
                 <label for="song">Song <span class="glyphicon glyphicon-music"></span></label>
                 <br>
@@ -91,7 +107,7 @@
       <div class="github">
         <b><a href='https://github.com/VasilisMpletsos/MaskRadio' class="link" target="_blank"><span class="glyphicon glyphicon-folder-close"></span> Github</a></b>
       </div>
-      <div id="space" class="container-fluid">
+      <div id="space" class="container-fluid hidden-xs">
       </div>
       <script src="js/song.js"></script>
     </body>
