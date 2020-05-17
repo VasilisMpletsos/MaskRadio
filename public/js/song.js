@@ -15,11 +15,9 @@ function addNotify(){
   if (w>728){
     var song = document.getElementById('songField');
     var forLove = document.getElementById('forField');
-    console.log(`Bigger than XS = ${w}`);
   }else{
     var song = document.getElementById('songFieldXs');
     var forLove = document.getElementById('forFieldXs');
-    console.log(`Smaller than XS = ${w}`);
   }
   const add = document.getElementById('notify');
   const success = document.createElement('div');
@@ -62,8 +60,6 @@ function postToSite() {
     var song2 = document.getElementById('songFieldXs').value;
     var dedicate = document.getElementById('forFieldXs').value;
   }
-  console.log('Dedicating Song');
-  console.log(song2,dedicate);
   $.ajax({
     method: "POST",
     url: '/maskRadio',
