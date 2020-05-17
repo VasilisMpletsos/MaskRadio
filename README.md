@@ -16,6 +16,7 @@ To do:
 2. Count Connected Users
 3. Add youtube search API to song and when click something set value to link or title?
 4. Auto load song when send and add it to a playlist!
+5. Make it more generic use a layout and throw content in it.
 
 
 Contributor: https://github.com/ZiposC

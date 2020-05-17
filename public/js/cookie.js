@@ -42,11 +42,10 @@ function getCookie(cname) {
 function checkCookie() {
   var user = getCookie("username");
   if (user != "") {
-    console.log('Cookie is already set');
+
   } else {
     setCookie("username", nameCookie(), 365);
     const newUser = getCookie("username");
-    console.log('New cookie is created');
   }
 }
 

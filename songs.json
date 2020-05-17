@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "song": "https://youtu.be/WeYsTmIzjkw",
+    "for": "καραντίνα πέρασαν  πουόλους  Για",
+    "listener": "Parasite-MK-19"
+  },
+  {
+    "song": "τοέρπε- ξέρω την πόλη απ' έξω",
+    "for": "Για τους ελληνες ακροατες! Ισπανικο ραδιοφωνο γιναμε",
+    "listener": "Parasite-Wg-38"
+  },
+  {
+    "song": "Πλοκάμι του Καρχαρία - Τραγούδι του Μπάζου",
+    "for": "Σ' εμένα. (K)",
+    "listener": "Parasite-Qg-54"
+  },
+  {
+    "song": "Dust Till dawn",
+    "for": "tester",
+    "listener": "Parasite-GD-71"
+  },
+  {
+    "song": "Love you",
+    "for": "Billys",
+    "listener": "Parasite-vH-7"
+  },
+  {
+    "song": "Adobe",
+    "for": "Vasilis",
+    "listener": "Parasite-GD-71"
+  }
+]
