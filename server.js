@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const songsRepo = require('./repositories/write');
+const songsRepo = require('./repositories/database-control');
 const parasitesRepo = require('./repositories/parasite');
 const fs = require('fs');
 const Ddos = require('ddos')
@@ -12,10 +12,11 @@ const compression = require("compression");
 const utilities = require('./repositories/utilities');
 const Playlist = require('./repositories/playlist');
 
+// Youtube Data API v3
 const {google} = require('googleapis');
 const youtube = google.youtube({
   version: 'v3',
-  auth: 'AIzaSyAYWRXvtfSaZKPLhu0T9ZaZ4fkbr-Aw5RQ'
+  auth: 'AIzaSyDSI6C64ulIfl8aqPWrlAHrvxkabzUpFoI'
 });
 
 // For Testing purposes only
