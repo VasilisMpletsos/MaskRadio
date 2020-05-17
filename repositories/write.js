@@ -43,8 +43,9 @@ class SongsRepository{
         ++ count;
       }
     }
-    return count;
+    return {count,songs};
   }
+
 }
 
 module.exports = new SongsRepository('songs.json');
