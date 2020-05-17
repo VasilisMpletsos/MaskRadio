@@ -84,24 +84,23 @@ app.post('/maskRadio/search',async (req,res) => {
   //await songsRepo.create({song: song, for: dedicate, listener: listener});
 
   // Search on youtube for the requested song.
-  youtube.search.list({
+  searchResults = await youtube.search.list({
     'q': `${song}`,
     'part': 'snippet',
     'type': 'video',
     'videoEmbeddable': true,
     'maxResults': 10
-  }).then(res => {
-    // For each video returned, get it's title and thumbnail and add it to the array
-    var songInfo = [];
-    res.data.items.forEach((song, indx) => {
-      songInfo.push({
-        'title': `${utilities.parseHTML(song['snippet']['title'])}`,
-        'thumbnail': `${song['snippet']['thumbnails']['high']['url']}`
-      });
-    });
-    return;
   }).catch(err => {
     console.log(err);
+  });
+  // For each video returned, get it's title and thumbnail and add it to the array
+  var songs = searchResults.data.items;
+  var songData = [];
+  songs.forEach((song, indx) => {
+    songData.push({
+      'title': `${utilities.parseHTML(song['snippet']['title'])}`,
+      'thumbnail': `${song['snippet']['thumbnails']['high']['url']}`
+    });
   });
 
   // Add the song
