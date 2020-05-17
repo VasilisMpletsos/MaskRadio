@@ -76,9 +76,9 @@ app.get('/parasite',async(req,res)=>{
 
 app.post('/parasite',async(req,res)=>{
   const {parasite} = req.body;
-  const {count,list} = await songsRepo.countSends(parasite);
+  const {count,songs} = await songsRepo.countSends(parasite);
   res.send(await parasitesRepo.parasiteRespond(parasite,count));
-  console.log(list);
+  console.log(songs);
 })
 
 //<------------Start Listening Sector------------>
