@@ -74,7 +74,6 @@ app.post('/maskRadio',async (req,res) => {
 app.post('/count',async (req,res) => {
   const {parasite} = req.body;
   const flag = await usersRepo.checkUser(parasite);
-  console.log(flag);
   if(flag){
       await usersRepo.create({user: parasite});
   }

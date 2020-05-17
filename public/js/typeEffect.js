@@ -4,10 +4,15 @@ var ended = 'false';
 var txt = 'Enter a song you want to hear!'; /* The text */
 var txt2 = 'Dedicate to someone?'; /* The text */
 var speed = 65; /* The speed/duration of the effect in milliseconds */
+var w = window.innerWidth;
 
 function typeSong(_callback) {
   if (i < txt.length) {
-    document.getElementById("songField").placeholder += txt.charAt(i);
+    if (w>728){
+        document.getElementById("songField").placeholder += txt.charAt(i);
+    }else{
+        document.getElementById("songFieldXs").placeholder += txt.charAt(i);
+    }
     i++;
     setTimeout(typeSong, speed);
   }else{
@@ -17,7 +22,11 @@ function typeSong(_callback) {
 
 function typeFor() {
   if (j < txt2.length) {
-    document.getElementById("forField").placeholder += txt2.charAt(j);
+    if (w>728){
+        document.getElementById("forField").placeholder += txt2.charAt(j);
+    }else{
+        document.getElementById("forFieldXs").placeholder += txt2.charAt(j);
+    }
     j++;
     setTimeout(typeFor, speed);
   }
