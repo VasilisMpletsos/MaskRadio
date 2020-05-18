@@ -1,23 +1,22 @@
 $('#songForm').submit(function (e) {
   e.preventDefault();
 
-  //They need to be the whole object because else is just like assign them a string 
+  //They need to be the whole object because else is just like assign them a string
   var song = document.getElementById('songField');
   var dedicate = document.getElementById('forField');
 
   if(dedicate.value == ""){
     dedicate.value = '-';
   }
-  notifyUser(song, dedicate);
 
   // Start the fading out of the previous songs
-  let songsContainer = document.getElementById('songsContainer');
+  var songsContainer = document.getElementById('songsContainer');
+  songsContainer.innerHTML = '';
   songsContainer.style.opacity = 0;
 
   searchSong(song.value).then(songsData => {
       displaySongs(songsContainer, songsData);
   }); // .then(=> {sendToPlaylist})
-  sendToPlaylist(song.value, dedicate.value);
 });
 
 function notifyUser(song, dedicate) {
@@ -76,7 +75,6 @@ function displaySongs(songsContainer, songsData) {
 
   songsData.forEach(song => {
     // Create the grid for the songs
-    console.log('i am song'+{song})
     let row = document.createElement('div');
     row.setAttribute('class', 'row');
 
@@ -89,9 +87,19 @@ function displaySongs(songsContainer, songsData) {
     songTitle.setAttribute('class', 'col-xs-8 vertical-align');
     songTitle.innerHTML = song['title'];
     row.appendChild(songTitle);
-
     songsContainer.appendChild(row);
-
+    row.addEventListener('click',()=>{
+      document.getElementById('songField').value = song['title'];
+      const input1 = document.getElementById('songField');
+      const input2 = document.getElementById('forField');
+      console.log(input1 + ' ' + input2);
+      sendToPlaylist(input1.value, input2.value);
+      notifyUser(input1, input2);
+      songsContainer.style.opacity = 0;
+      setTimeout(()=>{
+        songsContainer.innerHTML = '';
+      },1100)
+    })
   });
 
 }
