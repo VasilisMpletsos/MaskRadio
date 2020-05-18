@@ -3,32 +3,35 @@ $('#songForm').submit(function (e) {
   const song = $('#songField').val();
   const dedicate = $('#forField').val();
 
+  if(dedicate == ""){
+    dedicate = '-';
+  }
   notifyUser(song, dedicate);
 
   // Start the fading out of the previous songs
-  document.getElementById('songsContainer').style.opacity = 0;
+  let songsContainer = document.getElementById('songsContainer');
+  songsContainer.style.opacity = 0;
 
   searchSong(song).then(songsData => {
-      displaySongs(songsData);
-  });
+      displaySongs(searchContainer, songsData);
+  }); // .then(=> {sendToPlaylist})
   sendToPlaylist(song, dedicate);
 });
 
-function notifyUser(song, dedicate){
-  const add = document.getElementById('notify');
-  const success = document.createElement('div');
-  if(dedicate.value == ""){
-    dedicate.value = '-';
-  }
-  success.innerHTML = `<div class="alert alert-success">
-  <b><span class="glyphicon glyphicon-ok"></span></b><strong> Success!</strong> The song <b>${song}</b> for <b>${dedicate} </b> has been sent.
-  </div>`;
+function notifyUser(song, dedicate) {
+  let add = document.getElementById('notify');
+  let success = document.createElement('div');
+
+  success.innerHTML = `<div class="alert alert-success"><b>
+                       <span class="glyphicon glyphicon-ok"></span></b>
+                       <strong> Success!</strong> The song <b>${song}</b> for <b>${dedicate} </b> has been sent.
+                       </div>`;
   add.appendChild(success);
-  setTimeout(function(){
-        success.innerHTML = '';
+  setTimeout( () => {
+      success.innerHTML = '';
       add.appendChild(success);
-      song.value='';
-      dedicate.value='';
+      song='';
+      dedicate='';
     }, 4000);
 }
 
@@ -52,7 +55,7 @@ async function searchSong(song) {
   let songsData = await $.ajax({
     method: "POST",
     url: '/maskRadio/search',
-    data: {song:song},
+    data: song,
     success: songsData => {
       return songsData;
     }
@@ -61,15 +64,14 @@ async function searchSong(song) {
   return songsData;
 }
 
-function displaySongs(songsData) {
-  let songsContainer = document.getElementById('songsContainer');
+function displaySongs(songsContainer, songsData) {
   songsContainer.style.opacity = 1;
 
-  let row = document.createElement('div');
-  row.setAttribute('class', 'row text-center');
-  row.setAttribute = ('style', 'font: 1vh bold');
-  row.innerHTML = `Suggest A Song`;
-  songsContainer.appendChild(row)
+  let rowHead = document.createElement('div');
+  rowHead.setAttribute('class', 'row text-center');
+  rowHead.setAttribute = ('style', 'font: 2vh bold');
+  rowHead.innerHTML = `<h2>Suggest A Song</h2>`;
+  songsContainer.appendChild(rowHead);
 
   songsData.forEach(song => {
     // Create the grid for the songs

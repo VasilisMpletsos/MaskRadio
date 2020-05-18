@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const songsRepo = require('./repositories/database-control');
+const usersRepo = require('./repositories/count');
 const parasitesRepo = require('./repositories/parasite');
 const fs = require('fs');
 const Ddos = require('ddos')
@@ -40,13 +41,13 @@ const app = express();
 app.use(helmet());
 
 //Protecting against ddos attacks
-var ddos = new Ddos({burst:10, limit:15})
+var ddos = new Ddos({burst:50, limit:100})
 app.use(ddos.express);
 
 //Limiting Requests
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 200, // limit each IP to 200 requests per windowMs
+  max: 1000, // limit each IP to 1000 requests per windowMs
   message:"Too many attempts from this IP, please try again after 10 minutes"
 });
 app.use(limiter);
@@ -97,15 +98,23 @@ app.post('/maskRadio/addToPlaylist',async (req,res) => {
   console.log(playlist.songs);
 });
 
+app.post('/count',async (req,res) => {
+  const {parasite} = req.body;
+  const flag = await usersRepo.checkUser(parasite);
+  if(flag){
+      await usersRepo.create({user: parasite});
+  }
+});
+
 app.get('/parasite',async(req,res)=>{
   await res.sendFile(__dirname + '/public/html/parasite.html');
 })
 
 app.post('/parasite',async(req,res)=>{
   const {parasite} = req.body;
-  const {count,list} = await songsRepo.countSends(parasite);
+  const {count,songs} = await songsRepo.countSends(parasite);
   res.send(await parasitesRepo.parasiteRespond(parasite,count));
-  console.log(list);
+  //console.log(songs);
 })
 
 //<------------Start Listening Sector------------>
