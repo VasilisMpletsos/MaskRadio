@@ -48,8 +48,7 @@
           <h1>Καλωσορίσατε στο <b>Mask Radio </b></h1>
           <p>Ελπίζουμε να σας ταξιδέψουμε με τις μελωδίες μας και να γίνουμε μια όμορφη παρέα!</p>
           <p>Μπορείτε να στείλετε τα τραγούδια σας απο την <b><a href="#section3">ειδική φόρμα αποστολής τραγουδιών</a></b>.</p>
-          <br>
-          <center>
+          <br><center>
             <a id="facebook" href="https://www.facebook.com/Mask-Radio-105310681185250/" class="fa fa-facebook" target="_blank"></a>
             <a id="instagram" href="https://www.instagram.com/maskradiogreece/" class="fa fa-instagram" target="_blank"></a>
           </center>
@@ -64,59 +63,42 @@
       </div>
 
 
-      <div id="section3" class="container-fluid " >
-        <div class="vertical-center">
-          <center>
-            <form action="#" id="songForm" class="hidden-xs">
-              <div class="form-group">
-                <label for="song">Song <span class="glyphicon glyphicon-music"></span></label>
-                <br>
-                <input id="songField" name="song" width="100" type="text" autocomplete="on" required>
+      <div id="section3" class="container-fluid" >
+        <div class="container-fluid vertical-center">
+          <div class="row">
+            <div class="col-xs-8" id="formContainer">
+              <form action="#" id="songForm">
+                <div class="form-group">
+                  <label for="song">Song <span class="glyphicon glyphicon-music"></span> :</label>
+                  <input id="songField" name="song" type="text" required>
+                </div>
+                <div class="form-group">
+                  <label for="dedicate">Dedicate <span class="glyphicon glyphicon-heart"></span> :</label>
+                  <input id="forField" name="dedicate" type="text">
+                </div>
+                <button type="submit" class="btn btn-info btn-lg">
+                  <span class="glyphicon glyphicon-send"></span> Send
+                </button>
+              </form>
+              <br>
+              <div id=notify>
               </div>
-              <div class="form-group">
-                <label for="dedicate">Dedicate <span class="glyphicon glyphicon-heart"></span></label>
-                <br>
-                <input id="forField" name="dedicate" autocomplete="on" type="text">
-              </div>
-              <button type="submit" class="btn btn-info btn-lg">
-                <span class="glyphicon glyphicon-send"></span> Send
-              </button>
-            </form>
-
-            <form action="#" id="songFormXs" class="visible-xs">
-              <div class="form-group">
-                <label for="song">Song <span class="glyphicon glyphicon-music"></span></label>
-                <br>
-                <input id="songFieldXs" autocomplete="off" name="song" width="100" type="text" required>
-              </div>
-              <div class="form-group">
-                <label for="dedicate">Dedicate <span class="glyphicon glyphicon-heart"></span></label>
-                <br>
-                <input id="forFieldXs" autocomplete="off" name="dedicate" type="text">
-              </div>
-              <button type="submit" class="btn btn-info btn-lg">
-                <span class="glyphicon glyphicon-send"></span> Send
-              </button>
-            </form>
-          </center>
-            <br>
-            <div id=notify>
             </div>
+            <div class="col-xs-4" id="songsContainer">
+            </div>
+          </div>
+        </div>
+        <div class="github">
+        <b><a href='https://github.com/VasilisMpletsos/MaskRadio' class="link" target="_blank"><span class="glyphicon glyphicon-folder-close"></span> Github</a></b>
         </div>
       </div>
-      <div class="github">
-        <b><a href='https://github.com/VasilisMpletsos/MaskRadio' class="link" target="_blank"><span class="glyphicon glyphicon-folder-close"></span> Github</a></b>
-      </div>
-      <div id="space" class="container-fluid hidden-xs">
-      </div>
-      <script src="js/song.js"></script>
     </body>
-  <!-- <script src="js/snow.js"></script> -->
   <script src="js/size.js"></script>
   <script src="js/background.js"></script>
   <script src="js/rotate.js"></script>
   <script src="js/timer.js"></script>
   <script src="js/typeEffect.js"></script>
   <script src="js/cookie.js"></script>
+  <script src="js/song.js"></script>
   <script src="js/userCount.js"></script>
 </html>

@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const songsRepo = require('./repositories/write');
+const songsRepo = require('./repositories/database-control');
 const usersRepo = require('./repositories/count');
 const parasitesRepo = require('./repositories/parasite');
 const fs = require('fs');
@@ -9,6 +9,17 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cors = require("cors");
 const compression = require("compression");
+
+const utilities = require('./repositories/utilities');
+const Playlist = require('./repositories/playlist');
+
+// Youtube Data API v3
+const {google} = require('googleapis');
+const youtube = google.youtube({
+  version: 'v3',
+  auth: 'AIzaSyDSI6C64ulIfl8aqPWrlAHrvxkabzUpFoI'
+});
+
 // For Testing purposes only
 // const morgan = require("morgan");
 
@@ -65,10 +76,26 @@ app.get('/maskRadio',async function(req, res) {
   await res.sendFile(__dirname + '/public/html/index.html');
 });
 
-//Post Song
-app.post('/maskRadio',async (req,res) => {
+// Search youtube based on song title
+app.post('/maskRadio/search',async (req,res) => {
+  const song = req.body;
+  songsData = await searchYT(song);
+  res.send(songsData);
+});
+
+// Create the playlist of the day
+var playlist = new Playlist('Default', utilities.getDate());
+
+// Add the selected song to the playlist
+app.post('/maskRadio/addToPlaylist',async (req,res) => {
   const {song,dedicate,listener} = req.body;
-  await songsRepo.create({song: song, for: dedicate, listener: listener});
+  console.log(`---> We have to play [${song}] for [${dedicate}]`)
+
+  // await songsRepo.create({song: song, for: dedicate, listener: listener});
+
+  // Add the song
+  playlist.addSong(song);
+  console.log(playlist.songs);
 });
 
 app.post('/count',async (req,res) => {
@@ -94,3 +121,34 @@ app.post('/parasite',async(req,res)=>{
 
 //Listen to port 3000
 app.listen(port);
+
+async function searchYT(song) {
+  // Search on youtube for the requested song.
+  searchResults = await youtube.search.list({
+    'q': `${song}`,
+    'part': 'snippet',
+    'fields': 'items(id, snippet(title,thumbnails))',
+    'type': 'video',
+    'videoEmbeddable': true,
+    'maxResults': 5
+  }).catch(err => {
+    console.log(err);
+  });
+
+  // For each video returned, get it's title and thumbnail and add it to the array
+  var songs = searchResults.data.items;
+  var songsData = [];
+  songs.forEach((song, indx) => {
+    songsData.push({
+      'id': song['id']['videoId'],
+      'title': utilities.parseHTML(song['snippet']['title']),
+      'thumbnail': song['snippet']['thumbnails']['medium']['url']
+    });
+  });
+
+  console.log(searchResults);
+  console.log(songsData);
+
+  songsRepo.create(songsData);
+  return songsData;
+}

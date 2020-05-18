@@ -1,38 +1,37 @@
 $('#songForm').submit(function (e) {
   e.preventDefault();
-  addNotify();
-  postToSite();
+  const song = $('#songField').val();
+  const dedicate = $('#forField').val();
+
+  if(dedicate == ""){
+    dedicate = '-';
+  }
+  notifyUser(song, dedicate);
+
+  // Start the fading out of the previous songs
+  let songsContainer = document.getElementById('songsContainer');
+  songsContainer.style.opacity = 0;
+
+  searchSong(song).then(songsData => {
+      displaySongs(searchContainer, songsData);
+  }); // .then(=> {sendToPlaylist})
+  sendToPlaylist(song, dedicate);
 });
 
-$('#songFormXs').submit(function (e) {
-  e.preventDefault();
-  addNotify();
-  postToSite();
-});
+function notifyUser(song, dedicate) {
+  let add = document.getElementById('notify');
+  let success = document.createElement('div');
 
-function addNotify(){
-  var w = window.innerWidth;
-  if (w>728){
-    var song = document.getElementById('songField');
-    var forLove = document.getElementById('forField');
-  }else{
-    var song = document.getElementById('songFieldXs');
-    var forLove = document.getElementById('forFieldXs');
-  }
-  const add = document.getElementById('notify');
-  const success = document.createElement('div');
-  if(forLove.value == ""){
-    forLove.value = '-';
-  }
-  success.innerHTML = `<div class="alert alert-success">
-  <center><b><span class="glyphicon glyphicon-ok"></span></b><strong> Success!</strong> The song <b>${song.value}</b> for <b>${forLove.value} </b> has been sent.
-  </center></div>`;
+  success.innerHTML = `<div class="alert alert-success"><b>
+                       <span class="glyphicon glyphicon-ok"></span></b>
+                       <strong> Success!</strong> The song <b>${song}</b> for <b>${dedicate} </b> has been sent.
+                       </div>`;
   add.appendChild(success);
-  setTimeout(function(){
-        success.innerHTML = '';
+  setTimeout( () => {
+      success.innerHTML = '';
       add.appendChild(success);
-      song.value='';
-      forLove.value='';
+      song='';
+      dedicate='';
     }, 4000);
 }
 
@@ -51,22 +50,57 @@ function getCookie(cname) {
   return "";
 }
 
-function postToSite() {
-  var w2 = window.innerWidth;
-  if (w2>728){
-    var song2 = document.getElementById('songField').value;
-    var dedicate = document.getElementById('forField').value;
-  }else{
-    var song2 = document.getElementById('songFieldXs').value;
-    var dedicate = document.getElementById('forFieldXs').value;
-  }
-  $.ajax({
+async function searchSong(song) {
+
+  let songsData = await $.ajax({
     method: "POST",
-    url: '/maskRadio',
-    data: {song:song2, dedicate: dedicate, listener: getCookie("username")},
-    success: function(){
-      console.log('Success');
+    url: '/maskRadio/search',
+    data: song,
+    success: songsData => {
+      return songsData;
     }
   });
-  return false;
+
+  return songsData;
+}
+
+function displaySongs(songsContainer, songsData) {
+  songsContainer.style.opacity = 1;
+
+  let rowHead = document.createElement('div');
+  rowHead.setAttribute('class', 'row text-center');
+  rowHead.setAttribute = ('style', 'font: 2vh bold');
+  rowHead.innerHTML = `<h2>Suggest A Song</h2>`;
+  songsContainer.appendChild(rowHead);
+
+  songsData.forEach(song => {
+    // Create the grid for the songs
+    let row = document.createElement('div');
+    row.setAttribute('class', 'row');
+
+    let songThumbnail = document.createElement('img');
+    songThumbnail.setAttribute('class', 'col-xs-6 col-md-offset-1 thumbnail');
+    songThumbnail.setAttribute('src', song['thumbnail']);
+    row.appendChild(songThumbnail);
+
+    let songTitle = document.createElement('div');
+    songTitle.setAttribute('class', 'col-xs-8 vertical-align');
+    songTitle.innerHTML = song['title'];
+    row.appendChild(songTitle);
+
+    songsContainer.appendChild(row);
+
+  });
+
+}
+
+function sendToPlaylist(song, dedicate) {
+  $.ajax({
+    method: "POST",
+    url: '/maskRadio/addToPlaylist',
+    data: {song:song, dedicate: dedicate, listener: getCookie("username")},
+    success: suc => {
+      console.log(suc)
+    }
+  });
 }

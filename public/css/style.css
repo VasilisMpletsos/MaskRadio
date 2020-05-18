@@ -87,6 +87,36 @@ form{
   padding-bottom: 100px;
 }
 
+#formContainer {
+  display: block;
+  text-align: center;
+}
+
+#songsContainer {
+  opacity: 0;
+  border-radius: 40px;
+  background-color: #4c67b780;
+  border-color: #e7e08885;
+  border-width: 2px;
+  border-style: dotted;
+  backdrop-filter: blur(4px);
+  transition: opacity 1s ease-out;
+}
+
+.vertical-align {
+    padding-top: 2vh;
+}
+
+.thumbnail {
+  width: 23%;
+  border-radius: 1vw;
+  background-color: #160d1f;
+  border-color: #000000;
+  border-width: 1px;
+  border-style: groove;
+  backdrop-filter: blur(4px);
+}
+
 .vertical-center {
   margin: 0;
   position: relative;
