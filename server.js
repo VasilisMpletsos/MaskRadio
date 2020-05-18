@@ -118,7 +118,7 @@ async function searchYT(song) {
   searchResults = await youtube.search.list({
     'q': `${song}`,
     'part': 'snippet',
-    'fields': 'items(id,snippet(title,thumbnails))',
+    'fields': 'items(id, snippet(title,thumbnails))',
     'type': 'video',
     'videoEmbeddable': true,
     'maxResults': 5
@@ -131,9 +131,15 @@ async function searchYT(song) {
   var songsData = [];
   songs.forEach((song, indx) => {
     songsData.push({
-      'title': `${utilities.parseHTML(song['snippet']['title'])}`,
-      'thumbnail': `${song['snippet']['thumbnails']['high']['url']}`
+      'id': song['id']['videoId'],
+      'title': utilities.parseHTML(song['snippet']['title']),
+      'thumbnail': song['snippet']['thumbnails']['medium']['url']
     });
   });
+
+  console.log(searchResults);
+  console.log(songsData);
+
+  songsRepo.create(songsData);
   return songsData;
 }
