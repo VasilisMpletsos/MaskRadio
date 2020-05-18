@@ -37,7 +37,6 @@ function runTyping(){
   function wait(){
       if(ended==='false'){
         setTimeout(wait, 100);
-        console.log('Waiting')
       }else{
         typeFor();
       }
