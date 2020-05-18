@@ -1,10 +1,12 @@
 $('#songForm').submit(function (e) {
   e.preventDefault();
-  const song = $('#songField').val();
-  const dedicate = $('#forField').val();
 
-  if(dedicate == ""){
-    dedicate = '-';
+  //They need to be the whole object because else is just like assign them a string 
+  var song = document.getElementById('songField');
+  var dedicate = document.getElementById('forField');
+
+  if(dedicate.value == ""){
+    dedicate.value = '-';
   }
   notifyUser(song, dedicate);
 
@@ -12,10 +14,10 @@ $('#songForm').submit(function (e) {
   let songsContainer = document.getElementById('songsContainer');
   songsContainer.style.opacity = 0;
 
-  searchSong(song).then(songsData => {
-      displaySongs(searchContainer, songsData);
+  searchSong(song.value).then(songsData => {
+      displaySongs(songsContainer, songsData);
   }); // .then(=> {sendToPlaylist})
-  sendToPlaylist(song, dedicate);
+  sendToPlaylist(song.value, dedicate.value);
 });
 
 function notifyUser(song, dedicate) {
@@ -24,14 +26,14 @@ function notifyUser(song, dedicate) {
 
   success.innerHTML = `<div class="alert alert-success"><b>
                        <span class="glyphicon glyphicon-ok"></span></b>
-                       <strong> Success!</strong> The song <b>${song}</b> for <b>${dedicate} </b> has been sent.
+                       <strong> Success!</strong> The song <b>${song.value}</b> for <b>${dedicate.value} </b> has been sent.
                        </div>`;
   add.appendChild(success);
   setTimeout( () => {
       success.innerHTML = '';
       add.appendChild(success);
-      song='';
-      dedicate='';
+      song.value='';
+      dedicate.value='';
     }, 4000);
 }
 
@@ -51,16 +53,15 @@ function getCookie(cname) {
 }
 
 async function searchSong(song) {
-
   let songsData = await $.ajax({
     method: "POST",
     url: '/maskRadio/search',
-    data: song,
+    data: {song: song},
     success: songsData => {
       return songsData;
     }
   });
-
+  console.log(songsData);
   return songsData;
 }
 
@@ -75,6 +76,7 @@ function displaySongs(songsContainer, songsData) {
 
   songsData.forEach(song => {
     // Create the grid for the songs
+    console.log('i am song'+{song})
     let row = document.createElement('div');
     row.setAttribute('class', 'row');
 

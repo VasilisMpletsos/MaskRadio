@@ -78,7 +78,7 @@ app.get('/maskRadio',async function(req, res) {
 
 // Search youtube based on song title
 app.post('/maskRadio/search',async (req,res) => {
-  const song = req.body;
+  const {song} = req.body;
   songsData = await searchYT(song);
   res.send(songsData);
 });
