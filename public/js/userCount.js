@@ -25,4 +25,4 @@ function countUser(){
   return true;
 }
 
-document.body.onload(countUser());
+countUser();

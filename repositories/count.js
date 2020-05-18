@@ -36,7 +36,6 @@ class UsersRepository{
   }
 
   async checkUser(user){
-    console.log(user);
     const users = await this.getAll();
     var count = 0;
     for (var i=0; i<users.length; i++){
