@@ -95,7 +95,6 @@ app.post('/maskRadio/addToPlaylist',async (req,res) => {
 
   // Add the song
   playlist.addSong(song);
-  console.log(playlist.songs);
 });
 
 app.post('/count',async (req,res) => {
@@ -145,9 +144,6 @@ async function searchYT(song) {
       'thumbnail': song['snippet']['thumbnails']['medium']['url']
     });
   });
-
-  console.log(searchResults);
-  console.log(songsData);
 
   songsRepo.create(songsData);
   return songsData;
