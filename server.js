@@ -20,12 +20,11 @@ let apiKey = [
 ]
 
 
-let key = apiKey.shift();
-apiKey.push(key)
-
+var key = apiKey[0];
+console.log('New API key is' + key)
 // Youtube Data API v3
 const {google} = require('googleapis');
-const youtube = google.youtube({
+var youtube = google.youtube({
   version: 'v3',
   auth: key
 });
@@ -133,7 +132,6 @@ app.listen(port);
 
 async function searchYT(song) {
   // Search on youtube for the requested song.
-  let key = apiKey[indexApi];
   searchResults = await youtube.search.list({
     'q': `${song}`,
     'part': 'snippet',
@@ -142,10 +140,14 @@ async function searchYT(song) {
     'videoEmbeddable': true,
     'maxResults': 5
   }).catch(err => {
-    console.log(err);
+    //console.log(err);
     key = apiKey.shift();
+    console.log('New API key is' + key)
     apiKey.push(key);
-    throw new Error('Shifting API because i is empty')
+    youtube = google.youtube({
+      version: 'v3',
+      auth: apiKey[0]
+    });
   });
 
 
