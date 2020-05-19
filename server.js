@@ -13,11 +13,21 @@ const compression = require("compression");
 const utilities = require('./repositories/utilities');
 const Playlist = require('./repositories/playlist');
 
+let apiKey = [
+  'ApiAIzaSyDSI6C64ulIfl8aqPWrlAHrvxkabzUpFoI',
+  'AIzaSyDKQyVUB4nD6x-tbNMvrlpPpw5An0tQcVY'
+  // add more
+]
+
+
+let key = apiKey.shift();
+apiKey.push(key)
+
 // Youtube Data API v3
 const {google} = require('googleapis');
 const youtube = google.youtube({
   version: 'v3',
-  auth: 'AIzaSyDSI6C64ulIfl8aqPWrlAHrvxkabzUpFoI'
+  auth: key
 });
 
 // For Testing purposes only
@@ -123,6 +133,7 @@ app.listen(port);
 
 async function searchYT(song) {
   // Search on youtube for the requested song.
+  let key = apiKey[indexApi];
   searchResults = await youtube.search.list({
     'q': `${song}`,
     'part': 'snippet',
@@ -132,7 +143,11 @@ async function searchYT(song) {
     'maxResults': 5
   }).catch(err => {
     console.log(err);
+    key = apiKey.shift();
+    apiKey.push(key);
+    throw new Error('Shifting API because i is empty')
   });
+
 
   // For each video returned, get it's title and thumbnail and add it to the array
   var songs = searchResults.data.items;

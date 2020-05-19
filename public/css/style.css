@@ -77,13 +77,6 @@ input[type]{
   box-sizing: border-box;
 }
 
-.form2{
-  border-width: 3px;
-  border-style: dotted;
-  align-self: flex-start;
-  width: 100%;
-}
-
 form{
   border-radius: 40px;
   background-color: #4c67b780;
@@ -226,6 +219,15 @@ a.fa:visited{
 
 #songsContainer{
   z-index: 910;
+  border-radius: 10px;
+  background-color: #545cb74f;
+  border-width: 2px
+  border-style: dotted;
+  position: relative;
+  color: white;
+  font-weight: bold;
+  backdrop-filter: blur(9px);
+  font-family: sans-serif;
 }
 
 #notify{
