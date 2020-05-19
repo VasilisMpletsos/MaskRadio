@@ -43,10 +43,10 @@
 
 
         <div id="section3" class="container-fluid" >
-          <div class="container-fluid vertical-center">
+          <div class="vertical-center">
             <div class="row">
               <div class="col-md-7" id="formContainer">
-                <form action="#" id="songForm">
+                <form action="#" id="songForm" class='hidden-xs'>
                   <div class="form-group">
                     <label for="song">Song <span class="glyphicon glyphicon-music"></span></label>
                     <br>
@@ -61,6 +61,23 @@
                     <span class="glyphicon glyphicon-send"></span> Search
                   </button>
                 </form>
+
+                <form action="#" id="songFormXs" class="visible-xs">
+                  <div class="form-group">
+                    <label for="song">Song <span class="glyphicon glyphicon-music"></span></label>
+                    <br>
+                    <input id="songFieldXs" autocomplete="off" name="song" width="100" type="text" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="dedicate">Dedicate <span class="glyphicon glyphicon-heart"></span></label>
+                    <br>
+                    <input id="forFieldXs" autocomplete="off" name="dedicate" type="text">
+                  </div>
+                  <button type="submit" class="btn btn-info btn-lg">
+                    <span class="glyphicon glyphicon-send"></span> Search
+                  </button>
+                </form>
+
                 <br>
                 <div id=notify>
                 </div>

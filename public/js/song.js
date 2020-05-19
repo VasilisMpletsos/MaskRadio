@@ -19,6 +19,27 @@ $('#songForm').submit(function (e) {
   }); // .then(=> {sendToPlaylist})
 });
 
+$('#songFormXs').submit(function (e) {
+  e.preventDefault();
+
+  //They need to be the whole object because else is just like assign them a string
+  var song = document.getElementById('songFieldXs');
+  var dedicate = document.getElementById('forFieldXs');
+
+  if(dedicate.value == ""){
+    dedicate.value = '-';
+  }
+
+  // Start the fading out of the previous songs
+  var songsContainer = document.getElementById('songsContainer');
+  songsContainer.innerHTML = '';
+  songsContainer.style.opacity = 0;
+
+  searchSong(song.value).then(songsData => {
+      displaySongs(songsContainer, songsData);
+  }); // .then(=> {sendToPlaylist})
+});
+
 function notifyUser(song, dedicate) {
   let add = document.getElementById('notify');
   let success = document.createElement('div');
@@ -89,10 +110,15 @@ function displaySongs(songsContainer, songsData) {
     row.appendChild(songTitle);
     songsContainer.appendChild(row);
     row.addEventListener('click',()=>{
-      document.getElementById('songField').value = song['title'];
-      const input1 = document.getElementById('songField');
-      const input2 = document.getElementById('forField');
-      console.log(input1 + ' ' + input2);
+      if (w>728){
+        document.getElementById('songField').value = song['title'];
+        var input1 = document.getElementById('songField');
+        var input2 = document.getElementById('forField');
+      }else{
+        document.getElementById('songFieldXs').value = song['title'];
+        var input1 = document.getElementById('songFieldXs');
+        var input2 = document.getElementById('forFieldXs');
+      }
       sendToPlaylist(input1.value, input2.value);
       notifyUser(input1, input2);
       songsContainer.style.opacity = 0;

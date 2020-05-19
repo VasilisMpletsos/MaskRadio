@@ -68,12 +68,21 @@ html {
 
 input[type]{
   border-radius: 20px;
-  width: calc(100%);
+  width: 100%;
   padding: 12px 20px;
   margin: auto;
+  border-width: 3px;
+  max-width: 100%;
   text-align: center;
   color: black;
   box-sizing: border-box;
+}
+
+.form2{
+  border-width: 3px;
+  border-style: dotted;
+  align-self: flex-start;
+  width: 100%;
 }
 
 form{
@@ -84,8 +93,6 @@ form{
   border-style: dotted;
   backdrop-filter: blur(4px);
   padding-top: 100px;
-  padding-right: 0px;
-  padding-left: 0px;
   text-align: center;
   padding-bottom: 100px;
 }
@@ -93,8 +100,6 @@ form{
 #formContainer {
   display: block;
   text-align: left;
-  padding-right: 0px;
-  padding-left: 0px;
 }
 
 #songsContainer {
@@ -123,7 +128,7 @@ form{
 }
 
 .vertical-center {
-  margin: 0;
+  text-align: center;
   position: relative;
   top: 15%;
 }
@@ -222,4 +227,8 @@ a.fa:visited{
 
 #songsContainer{
   z-index: 910;
+}
+
+#notify{
+  z-index: 920;
 }
