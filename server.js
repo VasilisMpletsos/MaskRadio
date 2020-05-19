@@ -93,7 +93,10 @@ app.post('/maskRadio/addToPlaylist',async (req,res) => {
   // await songsRepo.create({song: song, for: dedicate, listener: listener});
 
   console.log(`---> We have to play [${songTitle}] for [${dedicate}]`)
-
+  let song = {
+    'id': songId,
+    'title': songTitle
+  };
   song['player'] = await youtube.videos.list({
     'part': 'player',
     'id': songId
