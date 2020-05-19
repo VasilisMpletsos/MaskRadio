@@ -95,7 +95,6 @@ app.post('/maskRadio/addToPlaylist',async (req,res) => {
 
   // Add the song
   playlist.addSong(song);
-  console.log(playlist.songs);
 });
 
 app.post('/count',async (req,res) => {
