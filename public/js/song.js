@@ -2,7 +2,7 @@
  * The submit function of the Search-song form.
  * Resets the UI of the song list, then searches on Youtube for the given query.
  * Displays the new song list. When the user clicks on a song,
- * it is added to the userPlaylist.
+ * it is added to the userPlaylist and the song list disappears.
  */
 $('#songForm').submit(e => {
   e.preventDefault();
@@ -11,31 +11,33 @@ $('#songForm').submit(e => {
   var song = document.getElementById('songField');
   var dedicate = document.getElementById('forField');
 
-  if(dedicate.value == ""){
+  if(dedicate.value == "") {
     dedicate.value = '-';
   }
 
-  var songlistContainer = resetSonglistContainer();
+  let songlistContainer = resetSonglistContainer(0);
 
   searchSong(song.value).then(songsData => {
-      displaySonglist(songlistContainer, songsData);
-  }); // .then(=> {sendToPlaylist})
+    displaySonglist(songlistContainer, songsData);
+  });
 });
 
 
 /**
  * Resets the user interface of the search song list. Firstly, starts the fading
  * and when the list has disappeared, it is emptied from content.
+ * @param {int} deleteContentInMS - The seconds after which the contents of the
+ * container will be deleted.
  * @returns {object} songlistContainer - The empty html element where the new
  * song list will be displayed.
  */
-function resetSonglistContainer() {
+function resetSonglistContainer(deleteContentInMS) {
   var songlistContainer = document.getElementById('songlistContainer');
 
   songlistContainer.style.opacity = 0;
   setTimeout(() => {
     songlistContainer.innerHTML = '';
-  }, 1100)
+  }, deleteContentInMS)
   return songlistContainer;
 }
 
@@ -94,23 +96,34 @@ function displaySonglist(songlistContainer, songsData) {
     songlistContainer.appendChild(row);
 
     row.addEventListener('click', () => {
-      document.getElementById('songField').value = song['title'];
-      const input1 = document.getElementById('songField');
-      const input2 = document.getElementById('forField');
-      console.log(input1 + ' ' + input2);
-      sendToPlaylist(input1.value, input2.value);
-      notifyUserDialog(input1, input2);
-      resetSonglistContainer();
+      [songTyped, dedicate] = getFormAndReset();
+      notifyUserDialog(song['title'], dedicate);
+      addToPlaylist(song['id'], song['title'], dedicate);
+      resetSonglistContainer(1000);
     })
   });
+}
+
+/**
+ * The function retrieves the form input values and then resets the form.
+ * @returns {array} - Contains the typed song title and the dedication of the song.
+ */
+function getFormAndReset() {
+  let songForm = document.getElementById('songField');
+  let dedicateForm = document.getElementById('forField');
+  songTyped = songForm.value;
+  dedicate = dedicateForm.value;
+  songForm.value='';
+  dedicateForm.value='';
+  return [songTyped, dedicate];
 }
 
 
 /**
  * Displays a short message, informing the user that the requested song has
  * been added to the userPlaylist. After 4 seconds, the message disappears.
- * @param {object} song - The form input parameter,the title of the song
- * @param {object} dedicate - The person to whom the song is dedicated to.
+ * @param {string} song - The form input field,the title of the song
+ * @param {string} dedicate - The person to whom the song is dedicated to.
  */
 function notifyUserDialog(song, dedicate) {
   let notifyDialog = document.getElementById('notify');
@@ -119,25 +132,26 @@ function notifyUserDialog(song, dedicate) {
 
   msgText.innerHTML = `<div class="alert alert-success"><b>
                        <span class="glyphicon glyphicon-ok"></span></b>
-                       <strong> Success!</strong> The song <b>${song.value}</b> for <b>${dedicate.value} </b> has been sent.
+                       <strong> Success!</strong> The song <b>${song}</b> for <b>${dedicate} </b> has been sent.
                        </div>`;
   notifyDialog.appendChild(msgText);
 
-  song.value='';
-  dedicate.value='';
-
   setTimeout( () => {
       msgText.innerHTML = '';
-      notifyDialog.appendChild(msgText);
     }, fadeInMS);
 }
 
-
-function sendToPlaylist(song, dedicate) {
+/**
+ * Sends to the server the exact song that has to be added to the userPlaylist.
+ * @param {string} songId - The unique identifier of the video.
+ * @param {string} songTitle - The exact title of the song.
+ * @param {string} dedicate - The person to whom the song is dedicated to.
+ */
+function addToPlaylist(songId, songTitle, dedicate) {
   $.ajax({
     method: "POST",
     url: '/maskRadio/addToPlaylist',
-    data: {song:song, dedicate: dedicate, listener: getCookie("username")},
+    data: {songId:songId, songTitle: songTitle, dedicate: dedicate, listener: getCookie("username")},
     success: suc => {
       console.log(suc)
     }

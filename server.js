@@ -88,11 +88,19 @@ var playlist = new Playlist('Default', utilities.getDate());
 
 // Add the selected song to the userPlaylist
 app.post('/maskRadio/addToPlaylist',async (req,res) => {
-  const {song,dedicate,listener} = req.body;
-  console.log(`---> We have to play [${song}] for [${dedicate}]`)
+  const {songId, songTitle, dedicate, listener} = req.body;
 
   // await songsRepo.create({song: song, for: dedicate, listener: listener});
 
+  console.log(`---> We have to play [${songTitle}] for [${dedicate}]`)
+  let song = {
+    'id': songId,
+    'title': songTitle
+  };
+  song['player'] = await youtube.videos.list({
+    'part': 'player',
+    'id': songId
+  });
   // Add the song
   playlist.addSong(song);
 });
@@ -123,6 +131,7 @@ app.listen(port);
 
 async function searchYT(song) {
   // Search on youtube for the requested song.
+
   searchResults = await youtube.search.list({
     'q': `${song}`,
     'part': 'snippet',
@@ -134,9 +143,9 @@ async function searchYT(song) {
     console.log(err);
   });
 
-  // For each video returned, get it's title and thumbnail and add it to the array
-  var songs = searchResults.data.items;
-  var songsData = [];
+  //For each video returned, get it's id, title and thumbnail and add it to the array
+  let songs = searchResults.data.items;
+  let songsData = [];
   songs.forEach((song, indx) => {
     songsData.push({
       'id': song['id']['videoId'],
@@ -145,8 +154,33 @@ async function searchYT(song) {
     });
   });
 
-  console.log(songsData);
+  // For UI Debugging purposes
+  //  songsData = [
+  //       {
+  //         "id": "r_0JjYUe5jo",
+  //         "title": "Eminem - Godzilla ft. Juice WRLD (Dir. by @_ColeBennett_)",
+  //         "thumbnail": "https://i.ytimg.com/vi/r_0JjYUe5jo/mqdefault.jpg"
+  //       },
+  //       {
+  //         "id": "RHQC4fAhcbU",
+  //         "title": "Eminem - Darkness (Official Video)",
+  //         "thumbnail": "https://i.ytimg.com/vi/RHQC4fAhcbU/mqdefault.jpg"
+  //       },
+  //       {
+  //         "id": "_Yhyp-_hX2s",
+  //         "title": "Eminem - Lose Yourself [HD]",
+  //         "thumbnail": "https://i.ytimg.com/vi/_Yhyp-_hX2s/mqdefault.jpg"
+  //       },
+  //       {
+  //         "id": "XbGs_qK2PQA",
+  //         "title": "Eminem - Rap God (Explicit) [Official Video]",
+  //         "thumbnail": "https://i.ytimg.com/vi/XbGs_qK2PQA/mqdefault.jpg"
+  //       },
+  //       {
+  //         "id": "YVkUvmDQ3HY",
+  //         "title": "Eminem - Without Me (Official Video)",
+  //         "thumbnail": "https://i.ytimg.com/vi/YVkUvmDQ3HY/mqdefault.jpg"}];
 
-  songsRepo.create(songsData);
+  //songsRepo.create(songsData);
   return songsData;
 }
