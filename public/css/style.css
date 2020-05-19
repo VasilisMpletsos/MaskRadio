@@ -68,7 +68,7 @@ html {
 
 input[type]{
   border-radius: 20px;
-  width: 100%;
+  width: calc(80%);
   padding: 12px 20px;
   margin: auto;
   border-width: 3px;
