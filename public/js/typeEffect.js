@@ -1,7 +1,7 @@
 var i = 0;
 var j = 0;
 var ended = 'false';
-var txt = 'Enter a song you want to hear!'; /* The text */
+var txt = 'Enter a song!'; /* The text */
 var txt2 = 'Dedicate to someone?'; /* The text */
 var speed = 65; /* The speed/duration of the effect in milliseconds */
 var w = window.innerWidth;
