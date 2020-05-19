@@ -86,7 +86,7 @@ app.post('/maskRadio/search',async (req,res) => {
 // Create the playlist of the day
 var playlist = new Playlist('Default', utilities.getDate());
 
-// Add the selected song to the playlist
+// Add the selected song to the userPlaylist
 app.post('/maskRadio/addToPlaylist',async (req,res) => {
   const {song,dedicate,listener} = req.body;
   console.log(`---> We have to play [${song}] for [${dedicate}]`)
@@ -146,7 +146,6 @@ async function searchYT(song) {
     });
   });
 
-  console.log(searchResults);
   console.log(songsData);
 
   songsRepo.create(songsData);
