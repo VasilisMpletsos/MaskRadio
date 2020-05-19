@@ -4,6 +4,7 @@ audio {
   bottom: 10px;
   width: calc(100% - 20px);
   margin-bottom: 20px;
+  z-index:900;
 }
 
 body{
@@ -67,7 +68,7 @@ html {
 
 input[type]{
   border-radius: 20px;
-  width: calc(40% + 100px);
+  width: calc(100%);
   padding: 12px 20px;
   margin: auto;
   text-align: center;
@@ -80,16 +81,20 @@ form{
   background-color: #4c67b780;
   border-color: #e7e08885;
   border-width: 2px;
-  align-items: center;
   border-style: dotted;
   backdrop-filter: blur(4px);
   padding-top: 100px;
+  padding-right: 0px;
+  padding-left: 0px;
+  text-align: center;
   padding-bottom: 100px;
 }
 
 #formContainer {
   display: block;
-  text-align: center;
+  text-align: left;
+  padding-right: 0px;
+  padding-left: 0px;
 }
 
 #songsContainer {
@@ -213,4 +218,8 @@ a.fa:visited{
   text-align: left;
   padding-left: 25%;
   background-color: #222222c9;
+}
+
+#songsContainer{
+  z-index: 910;
 }
