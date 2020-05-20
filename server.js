@@ -24,11 +24,12 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // Connect to the database server and if successful get the database.
-mongoClient.connect(err => {
-  if (err == null) {
-    console.log("Connected successfully to the database server");
-  }
-});
+mongoClient.connect()
+  .then(result => {
+    console.log("Connected to the database server.");
+  })
+  .catch(err => {console.log(err)});
+
 const db = mongoClient.db('MaskRadio');
 
 
@@ -42,16 +43,17 @@ const youtube = google.youtube({
 
 // configure passport.js to use the local strategy
 passport.use(new LocalStrategy((username, password, done) => {
-    db.collection('users').findOne({ username: username }, (err, user) => {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (user.password != password) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
+    db.collection('users').findOne({ username: username })
+      .then(user => {
+        if (!user) {
+          return done(null, false, { message: 'Incorrect username.' });
+        }
+        if (user.password != password) {
+          return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+      })
+      .catch(err => {return done(err);});
   }
 ));
 
@@ -61,9 +63,11 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((username, done) => {
-  db.collection('users').findOne({ username: username }, (err, user) => {
+  db.collection('users').findOne({ username: username })
+  .then(user => {
     return done(null, user);
   })
+  .catch(err => {console.log(`Error deserialising the user: ${err}`)})
 });
 
 // For Testing purposes only
@@ -102,7 +106,7 @@ app.use(limiter);
 app.use(session({
   genid: (req) => {
     console.log('Setting up a session with a client..')
-    return uuid() // use UUIDs for session IDs
+    return uuid() // The unique string identifier for the session.
   },
   store: new MongoStore({client: mongoClient}),
   secret: 'keyboard cat',
@@ -149,6 +153,31 @@ app.post('/login', (req, res) => {
 });
 
 
+/**
+ * This function is called when the user posts at signup his account information.
+ * The prerequisites for the account creation are: the passwords to match and
+ * the username to be unique. In every case, the appropriate response is sent.
+ */
+app.post('/signup', (req, res) => {
+  let {usrname, pswd, pswdConfirm} = req.body;
+  if (pswd != pswdConfirm) {
+    res.send('The passwords do not match.');
+    return ;
+  }
+  db.collection('users').insertOne({username: usrname, password: pswd, role: 'client'})
+    .then(result => {
+      res.send('Your account has been created.');
+    })
+    .catch(err => {
+      if (err.code == 11000) {
+        res.send('The username already exists.');
+      } else {
+        console.log(`Failed to insert: ${err}`)
+        res.send(`We couldn't create your account. Please try again.`);
+      }
+    });
+});
+
 // Search youtube based on song title
 app.post('/maskRadio/search',async (req,res) => {
   const {song} = req.body;
@@ -161,12 +190,12 @@ var playlist = new Playlist('Default', utilities.getDate());
 
 // Add the selected song to the userPlaylist
 app.post('/maskRadio/addToPlaylist',async (req,res) => {
-  const {songId, songTitle, dedicate, listener} = req.body;
+  const {songId, songTitle, thumbnail, dedicate, listener} = req.body;
 
   // await songsRepo.create({song: song, for: dedicate, listener: listener});
 
   console.log(`---> We have to play [${songTitle}] for [${dedicate}]`)
-  let song = { 'id': songId, 'title': songTitle };
+  let song = { 'id': songId, 'title': songTitle, 'thumbnail': thumbnail };
   song['player'] = await youtube.videos.list({ 'part': 'player', 'id': songId });
 
   // Add the song to the playlist

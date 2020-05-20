@@ -13,10 +13,6 @@ class UserController{
     }catch(err){
       fs.writeFileSync(this.filename,'[]');
     }
-
-    fs.readFile('signed_users.json', (err, sgnUsers) => {
-      this.signedUsers = JSON.parse(sgnUsers);
-    });
   }
 
   async getAll(){
@@ -51,12 +47,6 @@ class UserController{
     if(count === 0){
       return true;
     }
-  }
-
-  validateUser(usrname, pswd) {
-    return this.signedUsers.find(usr => {
-      return usr['username'] == usrname && usr['password'] == pswd;
-    });
   }
 }
 

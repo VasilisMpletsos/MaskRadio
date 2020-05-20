@@ -98,7 +98,7 @@ function displaySonglist(songlistContainer, songsData) {
     row.addEventListener('click', () => {
       [songTyped, dedicate] = getFormAndReset();
       notifyUserDialog(song['title'], dedicate);
-      addToPlaylist(song['id'], song['title'], dedicate);
+      addToPlaylist(song['id'], song['title'], song['thumbnail'], dedicate);
       resetSonglistContainer(1000);
     })
   });
@@ -148,11 +148,11 @@ function notifyUserDialog(song, dedicate) {
  * @param {string} songTitle - The exact title of the song.
  * @param {string} dedicate - The person to whom the song is dedicated to.
  */
-function addToPlaylist(songId, songTitle, dedicate) {
+function addToPlaylist(songId, songTitle, thumbnail, dedicate) {
   $.ajax({
     method: "POST",
     url: '/maskRadio/addToPlaylist',
-    data: {songId:songId, songTitle: songTitle, dedicate: dedicate, listener: getCookie("username")},
+    data: {songId:songId, songTitle: songTitle, thumbnail: thumbnail, dedicate: dedicate, listener: getCookie("username")},
     success: suc => {
       console.log(suc)
     }
