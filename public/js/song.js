@@ -104,6 +104,7 @@ function displaySonglist(songlistContainer, songsData) {
   });
 }
 
+
 /**
  * The function retrieves the form input values and then resets the form.
  * @returns {array} - Contains the typed song title and the dedication of the song.

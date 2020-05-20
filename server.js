@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const songsRepo = require('./repositories/database-control');
-const usersRepo = require('./repositories/count');
+const songsRepo = require('./repositories/database-controller');
+const UserController = require('./repositories/user-controller');
 const parasitesRepo = require('./repositories/parasite');
 const fs = require('fs');
 const Ddos = require('ddos')
@@ -13,11 +13,57 @@ const compression = require("compression");
 const utilities = require('./repositories/utilities');
 const Playlist = require('./repositories/playlist');
 
+const { v4: uuid } = require('uuid'); // To generate unique random strings
+
+// Session and database management
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session);
+const MongoClient = require('mongodb').MongoClient;
+const mongoClient = new MongoClient('mongodb://localhost:27017/MaskRadio', {useUnifiedTopology: true});
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+// Connect to the database server and if successful get the database.
+mongoClient.connect(err => {
+  if (err == null) {
+    console.log("Connected successfully to the database server");
+  }
+});
+const db = mongoClient.db('MaskRadio');
+
+
 // Youtube Data API v3
 const {google} = require('googleapis');
 const youtube = google.youtube({
   version: 'v3',
   auth: 'AIzaSyDSI6C64ulIfl8aqPWrlAHrvxkabzUpFoI'
+});
+
+
+// configure passport.js to use the local strategy
+passport.use(new LocalStrategy((username, password, done) => {
+    db.collection('users').findOne({ username: username }, (err, user) => {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (user.password != password) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+// tell passport how to serialize the user
+passport.serializeUser((user, done) => {
+  done(null, user.username);
+});
+
+passport.deserializeUser((username, done) => {
+  db.collection('users').findOne({ username: username }, (err, user) => {
+    return done(null, user);
+  })
 });
 
 // For Testing purposes only
@@ -52,6 +98,21 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// Add & configure the session middleware.
+app.use(session({
+  genid: (req) => {
+    console.log('Setting up a session with a client..')
+    return uuid() // use UUIDs for session IDs
+  },
+  store: new MongoStore({client: mongoClient}),
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 //Specify What user can do
 //This should be changed for cunnrent external ip address
 app.use(cors({
@@ -64,6 +125,7 @@ app.use(cors({
 
 //Form Parser
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 //Use compression for faster excecution
 app.use(compression());
@@ -72,9 +134,20 @@ app.use(compression());
 app.use(express.static(__dirname + '/public'));
 
 //Get Page
-app.get('/maskRadio',async function(req, res) {
-  await res.sendFile(__dirname + '/public/html/index.html');
+app.get('/maskRadio', (req, res) => {
+  res.sendFile(__dirname + '/public/html/index.html');
 });
+
+
+app.post('/login', (req, res) => {
+  passport.authenticate('local', (err, user, info) => {
+    req.login(user, (err) => {
+      console.log(`User logged in: ${JSON.stringify(req.user)}`)
+      return res.send('You were authenticated & logged in!\n');
+    })
+  })(req, res);
+});
+
 
 // Search youtube based on song title
 app.post('/maskRadio/search',async (req,res) => {
@@ -93,36 +166,31 @@ app.post('/maskRadio/addToPlaylist',async (req,res) => {
   // await songsRepo.create({song: song, for: dedicate, listener: listener});
 
   console.log(`---> We have to play [${songTitle}] for [${dedicate}]`)
-  let song = {
-    'id': songId,
-    'title': songTitle
-  };
-  song['player'] = await youtube.videos.list({
-    'part': 'player',
-    'id': songId
-  });
-  // Add the song
+  let song = { 'id': songId, 'title': songTitle };
+  song['player'] = await youtube.videos.list({ 'part': 'player', 'id': songId });
+
+  // Add the song to the playlist
   playlist.addSong(song);
 });
 
 app.post('/count',async (req,res) => {
   const {parasite} = req.body;
-  const flag = await usersRepo.checkUser(parasite);
+  const flag = await UserController.checkUser(parasite);
   if(flag){
-      await usersRepo.create({user: parasite});
+      await UserController.create({user: parasite});
   }
 });
 
 app.get('/parasite',async(req,res)=>{
   await res.sendFile(__dirname + '/public/html/parasite.html');
-})
+});
 
 app.post('/parasite',async(req,res)=>{
   const {parasite} = req.body;
   const {count,songs} = await songsRepo.countSends(parasite);
   res.send(await parasitesRepo.parasiteRespond(parasite,count));
   //console.log(songs);
-})
+});
 
 //<------------Start Listening Sector------------>
 
@@ -155,31 +223,31 @@ async function searchYT(song) {
   });
 
   // For UI Debugging purposes
-  //  songsData = [
-  //       {
-  //         "id": "r_0JjYUe5jo",
-  //         "title": "Eminem - Godzilla ft. Juice WRLD (Dir. by @_ColeBennett_)",
-  //         "thumbnail": "https://i.ytimg.com/vi/r_0JjYUe5jo/mqdefault.jpg"
-  //       },
-  //       {
-  //         "id": "RHQC4fAhcbU",
-  //         "title": "Eminem - Darkness (Official Video)",
-  //         "thumbnail": "https://i.ytimg.com/vi/RHQC4fAhcbU/mqdefault.jpg"
-  //       },
-  //       {
-  //         "id": "_Yhyp-_hX2s",
-  //         "title": "Eminem - Lose Yourself [HD]",
-  //         "thumbnail": "https://i.ytimg.com/vi/_Yhyp-_hX2s/mqdefault.jpg"
-  //       },
-  //       {
-  //         "id": "XbGs_qK2PQA",
-  //         "title": "Eminem - Rap God (Explicit) [Official Video]",
-  //         "thumbnail": "https://i.ytimg.com/vi/XbGs_qK2PQA/mqdefault.jpg"
-  //       },
-  //       {
-  //         "id": "YVkUvmDQ3HY",
-  //         "title": "Eminem - Without Me (Official Video)",
-  //         "thumbnail": "https://i.ytimg.com/vi/YVkUvmDQ3HY/mqdefault.jpg"}];
+   // songsData = [
+   //      {
+   //        "id": "r_0JjYUe5jo",
+   //        "title": "Eminem - Godzilla ft. Juice WRLD (Dir. by @_ColeBennett_)",
+   //        "thumbnail": "https://i.ytimg.com/vi/r_0JjYUe5jo/mqdefault.jpg"
+   //      },
+   //      {
+   //        "id": "RHQC4fAhcbU",
+   //        "title": "Eminem - Darkness (Official Video)",
+   //        "thumbnail": "https://i.ytimg.com/vi/RHQC4fAhcbU/mqdefault.jpg"
+   //      },
+   //      {
+   //        "id": "_Yhyp-_hX2s",
+   //        "title": "Eminem - Lose Yourself [HD]",
+   //        "thumbnail": "https://i.ytimg.com/vi/_Yhyp-_hX2s/mqdefault.jpg"
+   //      },
+   //      {
+   //        "id": "XbGs_qK2PQA",
+   //        "title": "Eminem - Rap God (Explicit) [Official Video]",
+   //        "thumbnail": "https://i.ytimg.com/vi/XbGs_qK2PQA/mqdefault.jpg"
+   //      },
+   //      {
+   //        "id": "YVkUvmDQ3HY",
+   //        "title": "Eminem - Without Me (Official Video)",
+   //        "thumbnail": "https://i.ytimg.com/vi/YVkUvmDQ3HY/mqdefault.jpg"}];
 
   //songsRepo.create(songsData);
   return songsData;

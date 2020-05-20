@@ -1,8 +1,9 @@
 const fs = require('fs');
 const util = require('util');
 
-class UsersRepository{
-  constructor(filename){
+class UserController{
+  signedUsers = [];
+  constructor(filename) {
     if(!filename){
       throw new Error('Requires filename');
     }
@@ -12,6 +13,10 @@ class UsersRepository{
     }catch(err){
       fs.writeFileSync(this.filename,'[]');
     }
+
+    fs.readFile('signed_users.json', (err, sgnUsers) => {
+      this.signedUsers = JSON.parse(sgnUsers);
+    });
   }
 
   async getAll(){
@@ -48,6 +53,11 @@ class UsersRepository{
     }
   }
 
+  validateUser(usrname, pswd) {
+    return this.signedUsers.find(usr => {
+      return usr['username'] == usrname && usr['password'] == pswd;
+    });
+  }
 }
 
-module.exports = new UsersRepository('users.json');
+module.exports = new UserController('users.json');
