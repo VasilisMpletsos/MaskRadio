@@ -14,8 +14,9 @@ const utilities = require('./repositories/utilities');
 const Playlist = require('./repositories/playlist');
 
 let apiKey = [
-  'ApiAIzaSyDSI6C64ulIfl8aqPWrlAHrvxkabzUpFoI',
-  'AIzaSyDKQyVUB4nD6x-tbNMvrlpPpw5An0tQcVY'
+  'AIzaSyDKQyVUB4nD6x-tbNMvrlpPpw5An0tQcVY',
+  'AIzaSyDSI6C64ulIfl8aqPWrlAHrvxkabzUpFoI',
+  'AIzaSyCZKBuyNT9aofyg0dIcQWk6730z-YFFJPk'
   // add more
 ]
 
@@ -123,6 +124,14 @@ app.post('/parasite',async(req,res)=>{
   const {count,songs} = await songsRepo.countSends(parasite);
   res.send(await parasitesRepo.parasiteRespond(parasite,count));
   //console.log(songs);
+})
+
+app.get('/signin',async(req,res)=>{
+  await res.sendFile(__dirname + '/public/html/signin.html');
+})
+
+app.get('/signup',async(req,res)=>{
+  await res.sendFile(__dirname + '/public/html/signup.html');
 })
 
 //<------------Start Listening Sector------------>
