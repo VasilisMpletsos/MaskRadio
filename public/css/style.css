@@ -49,6 +49,13 @@ iframe.chat{
   height: 100px;
 }
 
+
+.mask-icon {
+  height: 3.125rem;
+  margin-right: 1vh;
+  width: 3.125rem;
+}
+
 .center {
   margin: 0;
   position: absolute;
