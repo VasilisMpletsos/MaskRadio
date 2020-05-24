@@ -14,10 +14,9 @@ const utilities = require('./repositories/utilities');
 const Playlist = require('./repositories/playlist');
 
 let apiKey = [
-  'AIzaSyDKQyVUB4nD6x-tbNMvrlpPpw5An0tQcVY',
-  'AIzaSyDSI6C64ulIfl8aqPWrlAHrvxkabzUpFoI',
-  'AIzaSyCZKBuyNT9aofyg0dIcQWk6730z-YFFJPk'
-  // add more
+  'add your key1',
+  'add your key2',
+  'etc...'
 ]
 
 
