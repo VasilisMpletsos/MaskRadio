@@ -12,7 +12,7 @@ function checkNavbar(){
           <li><a href="#section2"><span class="glyphicon glyphicon-comment"></span> Chat</a></li>
           <li><a href="#section3"><span class="glyphicon glyphicon-share"></span> Send Song</a></li>
           <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> Contributors<span class="caret"></span></a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu contributors">
                 <li><b><a href='https://github.com/VasilisMpletsos' target="_blank"><span class="glyphicon glyphicon-flash"></span> Vmpletsos</a></b></li>
                 <li><b><a href='https://github.com/ZiposC' target="_blank"><span class="glyphicon glyphicon-flash"></span> ZiposC</a></b></li>
             </ul>
