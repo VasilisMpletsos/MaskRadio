@@ -38,13 +38,6 @@ let userSchema = new mongoose.Schema({
 
 let User = mongoose.model('User', userSchema);
 
-
-
-// User.find((err, users) => {
-//   if (err) return console.log(err);
-//   console.log(users);
-// });
-
 // Youtube Data API v3
 const {google} = require('googleapis');
 const youtube = google.youtube({
