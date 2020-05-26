@@ -15,23 +15,35 @@ const Playlist = require('./repositories/playlist');
 
 const { v4: uuid } = require('uuid'); // To generate unique random strings
 
-// Session and database management
+// For session management
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session);
-const MongoClient = require('mongodb').MongoClient;
-const mongoClient = new MongoClient('mongodb://localhost:27017/MaskRadio', {useUnifiedTopology: true});
+
+// For user authentication
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-// Connect to the database server and if successful get the database.
-mongoClient.connect()
-  .then(result => {
-    console.log("Connected to the database server.");
-  })
-  .catch(err => {console.log(err)});
+// Connect to database and create the user schema
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/MaskRadio', {
+  useUnifiedTopology: true,
+  useNewUrlParser: true
+});
 
-const db = mongoClient.db('MaskRadio');
+let userSchema = new mongoose.Schema({
+  username: String,
+  password: String,
+  role: String
+});
 
+let User = mongoose.model('User', userSchema);
+
+
+
+// User.find((err, users) => {
+//   if (err) return console.log(err);
+//   console.log(users);
+// });
 
 // Youtube Data API v3
 const {google} = require('googleapis');
@@ -43,8 +55,8 @@ const youtube = google.youtube({
 
 // configure passport.js to use the local strategy
 passport.use(new LocalStrategy((username, password, done) => {
-    db.collection('users').findOne({ username: username })
-      .then(user => {
+    User.findOne({ username: username })
+      .then( user => {
         if (!user) {
           return done(null, false, { message: 'Incorrect username.' });
         }
@@ -108,7 +120,7 @@ app.use(session({
     console.log('Setting up a session with a client..')
     return uuid() // The unique string identifier for the session.
   },
-  store: new MongoStore({client: mongoClient}),
+  store: new MongoStore({ mongooseConnection: mongoose.connection}),
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true
@@ -164,18 +176,22 @@ app.post('/signup', (req, res) => {
     res.send('The passwords do not match.');
     return ;
   }
-  db.collection('users').insertOne({username: usrname, password: pswd, role: 'client'})
-    .then(result => {
-      res.send('Your account has been created.');
-    })
-    .catch(err => {
+
+  let user = new User({username: usrname, password: pswd, role: 'client'});
+  user.save(err => {
+    if (err) {
+
       if (err.code == 11000) {
         res.send('The username already exists.');
       } else {
         console.log(`Failed to insert: ${err}`)
         res.send(`We couldn't create your account. Please try again.`);
       }
-    });
+
+    } else {
+      res.send('Your account has been created.');
+    }
+  });
 });
 
 // Search youtube based on song title
