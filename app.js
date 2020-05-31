@@ -191,6 +191,14 @@ app.post('/maskRadio/addToPlaylist',async (req,res) => {
 //Listen to port 3000
 app.listen(port);
 
+app.get('/signin',async(req,res)=>{
+  await res.sendFile(__dirname + '/public/html/signin.html');
+})
+
+app.get('/signup',async(req,res)=>{
+  await res.sendFile(__dirname + '/public/html/signup.html');
+})
+
 async function searchYT(song) {
   // Search on youtube for the requested song.
 
@@ -222,6 +230,7 @@ async function searchYT(song) {
       'thumbnail': song['snippet']['thumbnails']['medium']['url']
     });
   });
+
 
   // For UI Debugging purposes
    // songsData = [
