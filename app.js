@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({path:__dirname+'/global.env'})
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -18,14 +18,16 @@ const load = require('./loaders/index');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-// Connect to database and create the user schema
+const apiKey = process.env.AUTH_TOKEN.split(", ");
+var key = apiKey[0];
 
 // Youtube Data API v3
 const {google} = require('googleapis');
 const youtube = google.youtube({
   version: 'v3',
-  auth: process.env.YOUTUBE_APIKEY
+  auth: key
 });
+
 
 
 // configure passport.js to use the local strategy
@@ -199,7 +201,14 @@ async function searchYT(song) {
     'type': 'video',
     'videoEmbeddable': true,
   }).catch(err => {
-    console.log(err);
+    //console.log(err);
+    key = apiKey.shift();
+    console.log('New API key is' + key)
+    apiKey.push(key);
+    youtube = google.youtube({
+      version: 'v3',
+      auth: apiKey[0]
+    });
   });
 
   //For each video returned, get it's id, title and thumbnail and add it to the array
