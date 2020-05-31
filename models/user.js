@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   facebookId: String,
   instagramId: String,
   requestedSongs: [
-    {date: date, video: Video.schema}
+    {date: Date, video: Video.schema}
   ]
 })
 
