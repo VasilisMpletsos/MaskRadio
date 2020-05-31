@@ -22,7 +22,7 @@ h1{
   color: white;
 }
 
-iframe{
+iframe.chat{
   margin-top: 10%;
   border-radius: 10px;
   width: calc(100% - 10px);
@@ -50,6 +50,13 @@ iframe{
 #space {
   margin: auto;
   height: 100px;
+}
+
+
+.mask-icon {
+  height: 3.125rem;
+  margin-right: 1vh;
+  width: 3.125rem;
 }
 
 .center {
@@ -98,7 +105,7 @@ form{
   text-align: left;
 }
 
-#songsContainer {
+#songlistContainer {
   opacity: 0;
   border-radius: 40px;
   background-color: #4c67b780;
