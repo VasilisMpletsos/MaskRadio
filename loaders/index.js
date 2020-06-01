@@ -1,6 +1,7 @@
 const session = require('./session');
 const mongoose = require('mongoose');
 const passport = require('./passport');
+mongoose.set('useCreateIndex', true);
 
 module.exports = (app) => {
 
