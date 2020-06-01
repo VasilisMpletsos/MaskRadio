@@ -1,4 +1,4 @@
-const Ddos = require('ddos')
+const Ddos = require('ddos');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
