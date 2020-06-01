@@ -15,6 +15,8 @@ const Playlist = require('./repositories/playlist');
 const load = require('./loaders/index');
 const passport = require('./loaders/passport');
 
+const User = require('./models/user');
+
 const apiKey = process.env.AUTH_TOKEN.split(", ");
 var key = apiKey[0];
 
@@ -25,13 +27,6 @@ const youtube = google.youtube({
   auth: key
 });
 
-// For Testing purposes only
-// const morgan = require("morgan");
-
-//  Just for fun i name the listener as parasites in cookie name
-// in order to see anonymously ofcourse how many listeners (parasites)
-// are sending songs and how many
-
 const port = 3000;
 
 //Creating Server
@@ -39,8 +34,8 @@ const app = express();
 
 //<------------Security Sector------------>
 
-// For Testing purposes only
-// app.use(morgan("common"));
+app.use(passport.initialize());
+app.use(passport.session());
 
 //For Security Reasons
 app.use(helmet());
@@ -60,14 +55,6 @@ app.use(limiter);
 // Initialise session.
 load(app);
 
-//Specify What user can do
-//This should be changed for cunnrent external ip address
-app.use(cors({
-    origin: ["http://localhost:3000"],
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
 //<------------Main Sector------------>
 
 //Form Parser
@@ -86,11 +73,11 @@ app.get('/maskRadio', (req, res) => {
 });
 
 
-app.post('/login', (req, res) => {
+app.post('/signin', (req, res) => {
   passport.authenticate('local', (err, user, info) => {
     req.login(user, (err) => {
       console.log(`User logged in: ${JSON.stringify(req.user)}`)
-      return res.send('You were authenticated & logged in!\n');
+      res.redirect('/maskRadio');
     })
   })(req, res);
 });
@@ -108,17 +95,15 @@ app.post('/signup', (req, res) => {
     return ;
   }
 
-  let user = new User({username: usrname, password: pswd, role: 'client'});
+  let user = new User({username: usrname, role: 'client'});
   user.save(err => {
     if (err) {
-
       if (err.code == 11000) {
         res.send('The username already exists.');
       } else {
         console.log(`Failed to insert: ${err}`)
         res.send(`We couldn't create your account. Please try again.`);
       }
-
     } else {
       res.send('Your account has been created.');
     }
@@ -194,34 +179,5 @@ async function searchYT(song) {
     });
   });
 
-
-  // For UI Debugging purposes
-   // songsData = [
-   //      {
-   //        "id": "r_0JjYUe5jo",
-   //        "title": "Eminem - Godzilla ft. Juice WRLD (Dir. by @_ColeBennett_)",
-   //        "thumbnail": "https://i.ytimg.com/vi/r_0JjYUe5jo/mqdefault.jpg"
-   //      },
-   //      {
-   //        "id": "RHQC4fAhcbU",
-   //        "title": "Eminem - Darkness (Official Video)",
-   //        "thumbnail": "https://i.ytimg.com/vi/RHQC4fAhcbU/mqdefault.jpg"
-   //      },
-   //      {
-   //        "id": "_Yhyp-_hX2s",
-   //        "title": "Eminem - Lose Yourself [HD]",
-   //        "thumbnail": "https://i.ytimg.com/vi/_Yhyp-_hX2s/mqdefault.jpg"
-   //      },
-   //      {
-   //        "id": "XbGs_qK2PQA",
-   //        "title": "Eminem - Rap God (Explicit) [Official Video]",
-   //        "thumbnail": "https://i.ytimg.com/vi/XbGs_qK2PQA/mqdefault.jpg"
-   //      },
-   //      {
-   //        "id": "YVkUvmDQ3HY",
-   //        "title": "Eminem - Without Me (Official Video)",
-   //        "thumbnail": "https://i.ytimg.com/vi/YVkUvmDQ3HY/mqdefault.jpg"}];
-
-  //songsRepo.create(songsData);
   return songsData;
 }

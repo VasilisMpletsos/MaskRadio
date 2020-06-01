@@ -10,7 +10,7 @@ const videoSchema = new mongoose.Schema({
     embedHtml: String,
     embedHeight: Number,
     embedWidth: Number
-  }
+  },
   topicCategories: []
 })
 

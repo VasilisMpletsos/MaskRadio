@@ -1,5 +1,5 @@
 /*
- * The sessian initialisation function.
+ * The session initiallization function.
  * The MongoStore is responsible for saving the sessionId in the database.
  */
 

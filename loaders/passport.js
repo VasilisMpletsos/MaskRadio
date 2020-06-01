@@ -7,7 +7,6 @@
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-
 // configure passport.js to use the local strategy
 passport.use(new LocalStrategy((username, password, done) => {
     User.findOne({ username: username })
