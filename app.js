@@ -6,15 +6,12 @@ const fs = require('fs');
 const Ddos = require('ddos')
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const cors = require("cors");
 const compression = require("compression");
 
 const utilities = require('./repositories/utilities');
 const Playlist = require('./repositories/playlist');
-
+const passport = require('passport');
 const load = require('./loaders/index');
-const passport = require('./loaders/passport');
-
 const User = require('./models/user');
 
 const apiKey = process.env.AUTH_TOKEN.split(", ");
@@ -33,9 +30,6 @@ const port = 3000;
 const app = express();
 
 //<------------Security Sector------------>
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 //For Security Reasons
 app.use(helmet());
@@ -68,19 +62,17 @@ app.use(compression());
 app.use(express.static(__dirname + '/public'));
 
 //Get Page
-app.get('/maskRadio', (req, res) => {
-  res.sendFile(__dirname + '/public/html/index.html');
+app.get('/maskRadio', async(req, res) => {
+  if(req.isAuthenticated()){
+      await res.sendFile(__dirname + '/public/html/index.html');
+  }else{
+    res.redirect('/signin');
+  }
 });
 
 
-app.post('/signin', (req, res) => {
-  passport.authenticate('local', (err, user, info) => {
-    req.login(user, (err) => {
-      console.log(`User logged in: ${JSON.stringify(req.user)}`)
-      res.redirect('/maskRadio');
-    })
-  })(req, res);
-});
+app.post('/signin', passport.authenticate('local', { successRedirect: '/maskRadio',
+                                                    failureRedirect: '/signin' }));
 
 
 /**
@@ -89,25 +81,20 @@ app.post('/signin', (req, res) => {
  * the username to be unique. In every case, the appropriate response is sent.
  */
 app.post('/signup', (req, res) => {
-  let {usrname, pswd, pswdConfirm} = req.body;
-  if (pswd != pswdConfirm) {
+  let {username, password, pswdConfirm} = req.body;
+  if (password != pswdConfirm) {
     res.send('The passwords do not match.');
     return ;
   }
 
-  let user = new User({username: usrname, role: 'client'});
-  user.save(err => {
-    if (err) {
-      if (err.code == 11000) {
-        res.send('The username already exists.');
-      } else {
-        console.log(`Failed to insert: ${err}`)
-        res.send(`We couldn't create your account. Please try again.`);
-      }
-    } else {
-      res.send('Your account has been created.');
+  let user = new User({username: username, role: 'client'});
+  User.register(user,password,function(err,newuser){
+    if(err){
+      console.log(err);
+      return res.redirect('/signup');
     }
-  });
+    res.redirect('/maskRadio');
+  })
 });
 
 // Search youtube based on song title
@@ -122,7 +109,7 @@ var playlist = new Playlist('Default', utilities.getDate());
 
 // Add the selected song to the userPlaylist
 app.post('/maskRadio/addToPlaylist',async (req,res) => {
-  const {songId, songTitle, thumbnail, dedicate, listener} = req.body;
+  const {songId, songTitle, thumbnail, dedicate} = req.body;
 
   // await songsRepo.create({song: song, for: dedicate, listener: listener});
 
@@ -156,6 +143,7 @@ async function searchYT(song) {
     'fields': 'items(id(videoId), snippet(title,description, thumbnails(medium(url))))',
     'type': 'video',
     'videoEmbeddable': true,
+    'maxResults': 5
   }).catch(err => {
     //console.log(err);
     key = apiKey.shift();
@@ -171,7 +159,6 @@ async function searchYT(song) {
   let songs = searchResults.data.items;
   let songsData = [];
   songs.forEach((song, indx) => {
-    console.log(song);
     songsData.push({
       'id': song['id']['videoId'],
       'title': utilities.parseHTML(song['snippet']['title']),

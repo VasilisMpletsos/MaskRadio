@@ -1,5 +1,6 @@
 const session = require('./session');
 const mongoose = require('mongoose');
+const passport = require('./passport');
 
 module.exports = (app) => {
 
@@ -7,6 +8,7 @@ module.exports = (app) => {
     useUnifiedTopology: true,
     useNewUrlParser: true
   });
-  
+
   session(app, mongoose.connection);
+  passport(app);
 }

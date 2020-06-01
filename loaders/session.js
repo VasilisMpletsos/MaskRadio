@@ -11,7 +11,6 @@ const { v4: uuid } = require('uuid'); // To generate unique random strings
 module.exports = (app, mongooseConnection) => {
   app.use(session({
     genid: (req) => {
-      console.log('Setting up a session with a client..')
       return uuid() // The unique string identifier for the session.
     },
     store: new MongoStore({ mongooseConnection: mongooseConnection}),

@@ -13,6 +13,7 @@ const Video = require('./video');
 const userSchema = new mongoose.Schema({
   username: {type: String, unique: true},
   role: String,
+  password: String,
   googleId: String,
   facebookId: String,
   instagramId: String,

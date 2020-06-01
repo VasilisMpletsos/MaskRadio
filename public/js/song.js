@@ -74,8 +74,7 @@ function displaySonglist(songlistContainer, songsData) {
 
   // Create the title 'Suggest A Song' on the first row of the grid.
   let rowHead = document.createElement('div');
-  rowHead.setAttribute('class', 'row text-center');
-  rowHead.setAttribute = ('style', 'font: 2vh bold');
+  rowHead.setAttribute('class', 'row justify-content-center');
   rowHead.innerHTML = `<h2>Suggest A Song</h2>`;
   songlistContainer.appendChild(rowHead);
 
@@ -85,13 +84,13 @@ function displaySonglist(songlistContainer, songsData) {
     row.setAttribute('class', 'row');
 
     let songThumbnail = document.createElement('img');
-    songThumbnail.setAttribute('class', 'col-xs-6 col-md-offset-1 thumbnail');
+    songThumbnail.setAttribute('class', 'col-xs-6 offset-sm-1 thumbnail');
     songThumbnail.setAttribute('src', song['thumbnail']);
     row.appendChild(songThumbnail);
 
     let songTitle = document.createElement('div');
     songTitle.setAttribute('class', 'col-xs-8 vertical-align');
-    songTitle.innerHTML = song['title'];
+    songTitle.innerText = song['title'].substring(0,45) + '...';
     row.appendChild(songTitle);
     songlistContainer.appendChild(row);
 
@@ -131,7 +130,7 @@ function notifyUserDialog(song, dedicate) {
   let msgText = document.createElement('div');
   let fadeInMS = 4000;
 
-  msgText.innerHTML = `<div class="alert alert-success"><b>
+  msgText.innerHTML = `<div class="alert alert-success text-center"><b>
                        <span class="glyphicon glyphicon-ok"></span></b>
                        <strong> Success!</strong> The song <b>${song}</b> for <b>${dedicate} </b> has been sent.
                        </div>`;
@@ -152,7 +151,7 @@ function addToPlaylist(songId, songTitle, thumbnail, dedicate) {
   $.ajax({
     method: "POST",
     url: '/maskRadio/addToPlaylist',
-    data: {songId:songId, songTitle: songTitle, thumbnail: thumbnail, dedicate: dedicate, listener: getCookie("username")},
+    data: {songId:songId, songTitle: songTitle, thumbnail: thumbnail, dedicate: dedicate},
     success: suc => {
       console.log(suc)
     }
