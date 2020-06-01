@@ -13,10 +13,7 @@ const utilities = require('./repositories/utilities');
 const Playlist = require('./repositories/playlist');
 
 const load = require('./loaders/index');
-
-// For user authentication
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const passport = require('./loaders/passport');
 
 const apiKey = process.env.AUTH_TOKEN.split(", ");
 var key = apiKey[0];
@@ -26,37 +23,6 @@ const {google} = require('googleapis');
 const youtube = google.youtube({
   version: 'v3',
   auth: key
-});
-
-
-
-// configure passport.js to use the local strategy
-passport.use(new LocalStrategy((username, password, done) => {
-    User.findOne({ username: username })
-      .then( user => {
-        if (!user) {
-          return done(null, false, { message: 'Incorrect username.' });
-        }
-        if (user.password != password) {
-          return done(null, false, { message: 'Incorrect password.' });
-        }
-        return done(null, user);
-      })
-      .catch(err => {return done(err);});
-  }
-));
-
-// tell passport how to serialize the user
-passport.serializeUser((user, done) => {
-  done(null, user.username);
-});
-
-passport.deserializeUser((username, done) => {
-  db.collection('users').findOne({ username: username })
-  .then(user => {
-    return done(null, user);
-  })
-  .catch(err => {console.log(`Error deserialising the user: ${err}`)})
 });
 
 // For Testing purposes only
@@ -93,9 +59,6 @@ app.use(limiter);
 
 // Initialise session.
 load(app);
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 //Specify What user can do
 //This should be changed for cunnrent external ip address
