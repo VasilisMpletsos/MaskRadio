@@ -128,7 +128,7 @@ function getFormAndReset() {
 function notifyUserDialog(song, dedicate) {
   let notifyDialog = document.getElementById('notify');
   let msgText = document.createElement('div');
-  let fadeInMS = 4000;
+  let fadeInMS = 5000;
 
   msgText.innerHTML = `<div class="alert alert-success text-center"><b>
                        <span class="glyphicon glyphicon-ok"></span></b>

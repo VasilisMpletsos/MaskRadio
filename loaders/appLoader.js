@@ -58,20 +58,27 @@ module.exports = (app) => {
    * the username to be unique. In every case, the appropriate response is sent.
    */
   app.post('/signup', (req, res) => {
-    let {username, password, pswdConfirm} = req.body;
-    if (password != pswdConfirm) {
-      res.send('The passwords do not match.');
-      return ;
-    }
-
-    let user = new User({username: username, role: 'client'});
-    User.register(user,password,function(err,newuser){
+    var {username, password, pswdConfirm} = req.body;
+    User.findOne({username: username},(err,result)=>{
       if(err){
-        console.log(err);
         return res.send(err.message);
       }
-      res.redirect('/maskRadio');
-    })
+      if(!result){
+        if (password != pswdConfirm) {
+          return res.send('The passwords do not match.');
+        }
+        let user = new User({username: username, role: 'client'});
+        User.register(user,password,function(err,newuser){
+          if(err){
+            console.log(err);
+            return res.redirect('/signup');
+          }
+          res.redirect('/maskRadio');
+        })
+      }else{
+        return res.send(`Username ${result.username} already exist`)
+      }
+    });
   });
 
   // Search youtube based on song title
