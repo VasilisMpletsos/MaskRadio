@@ -103,6 +103,7 @@ module.exports = (app) => {
 
     // Add the song to the playlist
     playlist.addSong(song);
+    //console.log(playlist);
   });
 
   app.get('/maskRadio', async(req, res) => {

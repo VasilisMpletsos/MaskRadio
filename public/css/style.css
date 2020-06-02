@@ -55,9 +55,9 @@ iframe.chat{
 
 
 .mask-icon {
-  height: 3.125rem;
+  height: 4rem;
   margin-right: 1vh;
-  width: 3.125rem;
+  width: 4rem;
 }
 
 .center {
@@ -93,8 +93,6 @@ input[type]{
 form{
   border-radius: 20px;
   background-color: #4c67b780;
-  border-color: #e7e08885;
-  border-width: 2px;
   backdrop-filter: blur(4px);
   padding-top: 100px;
   width: 100%;
@@ -110,12 +108,11 @@ form{
 
 #songlistContainer {
   opacity: 0;
-  border-radius: 40px;
+  border-radius: 30px;
   background-color: #4c67b780;
-  border-color: #e7e08885;
-  border-width: 2px;
-  border-style: dotted;
   backdrop-filter: blur(4px);
+  width: 100%;
+  text-align: center;
   transition: opacity 1s ease-out;
 }
 
