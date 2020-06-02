@@ -63,6 +63,7 @@ iframe.chat{
   margin: 0;
   position: absolute;
   top: 45%;
+  width: 60%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
@@ -77,27 +78,28 @@ html {
 }
 
 input[type]{
-  border-radius: 20px;
-  width: calc(80%);
-  padding: 12px 20px;
-  margin: auto;
-  border-width: 3px;
-  max-width: 100%;
-  text-align: center;
+  width: 80%;
   color: black;
+  display: table-cell;
+  border-style: hidden;
+  padding: 14px 20px;
   box-sizing: border-box;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 6px;
 }
 
 form{
-  border-radius: 40px;
+  border-radius: 20px;
   background-color: #4c67b780;
   border-color: #e7e08885;
   border-width: 2px;
-  border-style: dotted;
   backdrop-filter: blur(4px);
   padding-top: 100px;
+  width: 100%;
   text-align: center;
   padding-bottom: 100px;
+  display: table;
 }
 
 #formContainer {
@@ -123,6 +125,7 @@ form{
 .thumbnail {
   width: 23%;
   border-radius: 1vw;
+  margin-right: 3%;
   background-color: #160d1f;
   border-color: #000000;
   border-width: 1px;
@@ -250,4 +253,10 @@ a.fa:visited{
 
 .row{
   margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: 3%;
+}
+
+.form-group{
+  width: 100%;
 }

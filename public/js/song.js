@@ -4,7 +4,7 @@
  * Displays the new song list. When the user clicks on a song,
  * it is added to the userPlaylist and the song list disappears.
  */
-$('#songForm').submit(e => {
+$('#songF').submit(e => {
   e.preventDefault();
 
   // Get the data from the form.
@@ -81,7 +81,7 @@ function displaySonglist(songlistContainer, songsData) {
   songsData.forEach(song => {
     let row = document.createElement('div');
     row.setAttribute('id', `${song['id']}`);
-    row.setAttribute('class', 'row');
+    row.setAttribute('class', 'row songList');
 
     let songThumbnail = document.createElement('img');
     songThumbnail.setAttribute('class', 'col-xs-6 offset-sm-1 thumbnail');
@@ -89,8 +89,8 @@ function displaySonglist(songlistContainer, songsData) {
     row.appendChild(songThumbnail);
 
     let songTitle = document.createElement('div');
-    songTitle.setAttribute('class', 'col-xs-8 vertical-align');
-    songTitle.innerText = song['title'].substring(0,45) + '...';
+    songTitle.setAttribute('class', 'col-xs-8 vertical-align songTitle');
+    songTitle.innerText = song['title'].substring(0,30) + '...';
     row.appendChild(songTitle);
     songlistContainer.appendChild(row);
 
