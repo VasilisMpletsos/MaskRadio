@@ -15,7 +15,8 @@ body{
 }
 
 html{
-  font-family: serif;
+  font-family: 'Caudex',serif;
+  font-weight: 400;
 }
 
 h1{
@@ -227,7 +228,11 @@ a.fa:visited{
 
 .dropdown-menu{
   text-align: center;
-  background-color: #222222c9;
+  background: linear-gradient(30deg, #000000 0%,#131d42 25%,#283461 50%,#46517b 75%,#46517b 100%);
+}
+
+.dropdown-item{
+  color: white;
 }
 
 #songsContainer{

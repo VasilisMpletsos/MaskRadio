@@ -65,7 +65,7 @@ module.exports = (app) => {
       }
       if(!result){
         if (password != pswdConfirm) {
-          return res.send('The passwords do not match.');
+          return res.send('The passwords must not match.');
         }
         let user = new User({username: username, role: 'client'});
         User.register(user,password,function(err,newuser){
