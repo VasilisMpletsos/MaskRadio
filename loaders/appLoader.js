@@ -7,6 +7,7 @@ const passport = require('passport');
 const Playlist = require('../repositories/playlist');
 const utilities = require('../repositories/utilities');
 const User = require('../models/user');
+const { exec } = require("child_process");
 
 module.exports = (app) => {
 
@@ -97,13 +98,21 @@ module.exports = (app) => {
 
     // await songsRepo.create({song: song, for: dedicate, listener: listener});
 
-    console.log(`---> We have to play [${songTitle}] for [${dedicate}]`)
+    //console.log(`---> We have to play [${songTitle}] for [${dedicate}]`)
+
+    //We should update this part in order to write them in the Database!
     let song = { 'id': songId, 'title': songTitle, 'thumbnail': thumbnail };
     song['player'] = await youtube.videos.list({ 'part': 'player', 'id': songId });
 
     // Add the song to the playlist
-    playlist.addSong(song);
-    //console.log(playlist);
+    let flag = false;
+    for(let songF of playlist.songs){
+      if (songF.id === songId){flag = true};
+    };
+    if(!flag){
+      exec(`start chrome https://www.youtube.com/watch?v=${songId}`);
+      playlist.addSong(song);
+    }
   });
 
   app.get('/maskRadio', async(req, res) => {
