@@ -12,7 +12,12 @@ async function countSongs() {
 
 function displayCountSongs(songlistCounter){
   countSongs().then((count)=>{
-    songlistCounter.innerText = `${count.count}`;
+    let countSong = count.count;
+    if(countSong === 1){
+      songlistCounter.innerText = `${countSong} Song Request`;
+    }else if(countSong > 1){
+      songlistCounter.innerText = `${countSong} Song Requests`;
+    }
   })
 }
 
