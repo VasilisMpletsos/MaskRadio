@@ -8,7 +8,6 @@
 
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
-const Video = require('./song');
 
 const userSchema = new mongoose.Schema({
   username: {type: String, unique: true},
@@ -16,10 +15,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   googleId: String,
   facebookId: String,
-  instagramId: String,
-  requestedSongs: [
-    {date: Date, video: Video.schema}
-  ]
+  instagramId: String
 })
 
 userSchema.plugin(passportLocalMongoose);

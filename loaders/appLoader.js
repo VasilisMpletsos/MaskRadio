@@ -72,9 +72,8 @@ module.exports = (app) => {
         let user = new User({username: username, role: 'client'});
         User.register(user,password,function(err,newuser){
           if(err){
-            return res.redirect('/signup');
+            return res.send(err);
           }
-          passport.authenticate('local', { successRedirect: '/maskRadio',failureRedirect: '/signin' });
           res.redirect('/maskRadio');
         })
       }else{
