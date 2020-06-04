@@ -262,3 +262,7 @@ a.fa:visited{
 .form-group{
   width: 100%;
 }
+
+#countSongs{
+  transition: opacity 1s ease-out;
+}

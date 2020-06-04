@@ -91,7 +91,7 @@ module.exports = (app) => {
 
   // Open 4 random songs when start server in order to play until
   // listeners starts to send songs and we have a proper amount of requests!
-  Song.aggregate([{$sample: {size: 4}}],(err,data)=>{
+  Song.aggregate([{$sample: {size: 6}}],(err,data)=>{
     if(err){return};
     for(let song of data){
       exec(`start https://www.youtube.com/watch?v=${song.id}`);
