@@ -59,7 +59,7 @@ module.exports = (app) => {
    * The prerequisites for the account creation are: the passwords to match and
    * the username to be unique. In every case, the appropriate response is sent.
    */
-  app.post('/signup', (req, res) => {
+  app.post('/signup',async (req, res) => {
     var {username, password, pswdConfirm} = req.body;
     User.findOne({username: username},(err,result)=>{
       if(err){
@@ -92,6 +92,7 @@ module.exports = (app) => {
   // Open 4 random songs when start server in order to play until
   // listeners starts to send songs and we have a proper amount of requests!
   Song.aggregate([{$sample: {size: 4}}],(err,data)=>{
+    if(err){return};
     for(let song of data){
       exec(`start https://www.youtube.com/watch?v=${song.id}`);
     }
@@ -125,6 +126,11 @@ module.exports = (app) => {
     }
   });
 
+  app.post('/maskRadio/countSongs',async (req,res) => {
+    let count = {count: playlist.songs.length};
+    res.send(count);
+  });
+
   app.get('/maskRadio', async(req, res) => {
     if(req.isAuthenticated()){
         await res.sendFile(process.env.MASKRADIO_PATH);
@@ -132,7 +138,6 @@ module.exports = (app) => {
       res.redirect('/signin');
     }
   });
-
 
   app.get('/signin',async(req,res)=>{
     await res.sendFile(process.env.SIGNIN_PATH);
@@ -174,6 +179,4 @@ module.exports = (app) => {
 
     return songsData;
   }
-
-
 };
