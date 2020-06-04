@@ -72,7 +72,6 @@ module.exports = (app) => {
         let user = new User({username: username, role: 'client'});
         User.register(user,password,function(err,newuser){
           if(err){
-            console.log(err);
             return res.redirect('/signup');
           }
           passport.authenticate('local', { successRedirect: '/maskRadio',failureRedirect: '/signin' });
@@ -147,9 +146,7 @@ module.exports = (app) => {
       'videoEmbeddable': true,
       'maxResults': 5
     }).catch(err => {
-      //console.log(err);
       key = apiKey.shift();
-      console.log('New API key is' + key)
       apiKey.push(key);
       youtube = google.youtube({
         version: 'v3',
