@@ -1,8 +1,7 @@
-
 const mongoose = require('mongoose');
 
-const videoSchema = new mongoose.Schema({
-  id: String,
+const songSchema = new mongoose.Schema({
+  id: {type: String, unique: true},
   title: String,
   description: String,
   thumbnail: String,
@@ -14,4 +13,4 @@ const videoSchema = new mongoose.Schema({
   topicCategories: []
 })
 
-module.exports = mongoose.model('Song', videoSchema);
+module.exports = mongoose.model('Song', songSchema);

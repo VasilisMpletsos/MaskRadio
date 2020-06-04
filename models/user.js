@@ -8,7 +8,7 @@
 
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
-const Video = require('./video');
+const Video = require('./song');
 
 const userSchema = new mongoose.Schema({
   username: {type: String, unique: true},

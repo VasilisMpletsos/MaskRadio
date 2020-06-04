@@ -4,7 +4,7 @@ audio {
   bottom: 10px;
   width: calc(100% - 20px);
   margin-bottom: 20px;
-  z-index:900;
+  z-index:500;
 }
 
 body{
@@ -233,7 +233,6 @@ a.fa:visited{
 }
 
 #songsContainer{
-  z-index: 910;
   border-radius: 10px;
   background-color: #545cb74f;
   border-width: 2px
@@ -243,6 +242,7 @@ a.fa:visited{
   font-weight: bold;
   backdrop-filter: blur(9px);
   font-family: sans-serif;
+  z-index:900;
 }
 
 #notify{

@@ -7,16 +7,17 @@ const passport = require('passport');
 const Playlist = require('../repositories/playlist');
 const utilities = require('../repositories/utilities');
 const User = require('../models/user');
+const Song = require('../models/song');
 const { exec } = require("child_process");
 
 module.exports = (app) => {
 
-  const apiKey = process.env.AUTH_TOKEN.split(", ");
+  var apiKey = process.env.AUTH_TOKEN.split(", ");
   var key = apiKey[0];
 
   // Youtube Data API v3
   const {google} = require('googleapis');
-  const youtube = google.youtube({
+  var youtube = google.youtube({
     version: 'v3',
     auth: key
   });
@@ -74,6 +75,7 @@ module.exports = (app) => {
             console.log(err);
             return res.redirect('/signup');
           }
+          passport.authenticate('local', { successRedirect: '/maskRadio',failureRedirect: '/signin' });
           res.redirect('/maskRadio');
         })
       }else{
@@ -98,7 +100,6 @@ module.exports = (app) => {
 
     // await songsRepo.create({song: song, for: dedicate, listener: listener});
 
-    //console.log(`---> We have to play [${songTitle}] for [${dedicate}]`)
 
     //We should update this part in order to write them in the Database!
     let song = { 'id': songId, 'title': songTitle, 'thumbnail': thumbnail };
@@ -110,8 +111,11 @@ module.exports = (app) => {
       if (songF.id === songId){flag = true};
     };
     if(!flag){
-      exec(`start chrome https://www.youtube.com/watch?v=${songId}`);
+      exec(`start https://www.youtube.com/watch?v=${songId}`);
+      console.log(`---> We have to play [${songTitle}] for [${dedicate}]`)
       playlist.addSong(song);
+      let song2 = new Song({ id: songId, title: songTitle, thumbnail: thumbnail });
+      song2.save((err,res)=>{if(err){return;}})
     }
   });
 
