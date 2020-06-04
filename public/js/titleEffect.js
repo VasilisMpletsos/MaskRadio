@@ -1,6 +1,6 @@
 var k = 0;
 var title = 'Mask_Radio!'; /* The text */
-var speedTtitle = 300; /* The speed/duration of the effect in milliseconds */
+var speedTtitle = 100; /* The speed/duration of the effect in milliseconds */
 
 function typeTitle(_callback) {
   if (k < title.length) {

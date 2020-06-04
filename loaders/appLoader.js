@@ -89,6 +89,14 @@ module.exports = (app) => {
     res.send(songsData);
   });
 
+  // Open 4 random songs when start server in order to play until
+  // listeners starts to send songs and we have a proper amount of requests!
+  Song.aggregate([{$sample: {size: 4}}],(err,data)=>{
+    for(let song of data){
+      exec(`start https://www.youtube.com/watch?v=${song.id}`);
+    }
+  });
+
   // Create the playlist of the day
   var playlist = new Playlist('Default', utilities.getDate());
 
