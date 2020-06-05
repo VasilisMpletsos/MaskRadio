@@ -5,6 +5,7 @@ module.exports = ({content})=>{
       <head>
           <title>Sign Up Form - Mask Radio</title>
           <meta charset="utf-8">
+          <link rel='icon' href='./images/favicon.png' type='image/png'/>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
           <link rel="stylesheet" type="text/css" href="css/styleSign.css">
