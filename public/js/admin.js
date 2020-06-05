@@ -25,7 +25,7 @@ function displaySongs(songlist){
       row.setAttribute('id', 'parent');
 
       let songThumbnail = document.createElement('img');
-      songThumbnail.setAttribute('class', 'col-xs-6 offset-sm-1 thumbnail');
+      songThumbnail.setAttribute('class', 'col-xs-6 thumbnail');
       songThumbnail.setAttribute('src', song['thumbnail']);
       row.appendChild(songThumbnail);
 
@@ -37,7 +37,7 @@ function displaySongs(songlist){
 
       let songTitle = document.createElement('div');
       songTitle.setAttribute('class', 'songTitle');
-      songTitle.innerText = song['title'] + ' | ' + song['dedicate'];
+      songTitle.innerText = song['title'].substring(0,30) + ' | ' + song['dedicate'];
       link.appendChild(songTitle);
 
       songlist.appendChild(row);
