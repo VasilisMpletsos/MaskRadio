@@ -59,7 +59,7 @@ module.exports = (app) => {
     if (err) {
       let div = {content: `
       <div class="alert alert-danger">
-        <strong>Warning!</strong> An error has occured.
+        <strong>Warning!</strong> An error has occured!
       </div>
       `
       }
@@ -68,7 +68,7 @@ module.exports = (app) => {
     if (!user) {
       let div = {content: `
       <div class="alert alert-danger">
-        <strong>Warning!</strong> Didn't find match.
+        <strong>Warning!</strong> Didn't find match!
       </div>
       `
       }
@@ -78,7 +78,7 @@ module.exports = (app) => {
       if (err) {
         let div = {content: `
         <div class="alert alert-danger">
-          <strong>Warning!</strong> An error has occured.
+          <strong>Warning!</strong> An error has occured!
         </div>
         `
         }
@@ -101,7 +101,7 @@ module.exports = (app) => {
       if(err){
         let div = {content: `
         <div class="alert alert-danger">
-          <strong>Warning!</strong> An error has occured.
+          <strong>Warning!</strong> An error has occured!
         </div>
         `
         }
@@ -112,7 +112,7 @@ module.exports = (app) => {
           //The password should match
           let div = {content: `
           <div class="alert alert-danger">
-            <strong>Warning!</strong> Passwords should match.
+            <strong>Warning!</strong> Passwords should match!
           </div>
           `
           }
@@ -123,18 +123,23 @@ module.exports = (app) => {
           if(err){
             let div = {content:`
             <div class="alert alert-danger">
-              <strong>Warning!</strong> An error has occured.
+              <strong>Warning!</strong> An error has occured!
             </div>
             `
             }
             return res.send(signup(div));
           }
-          return res.redirect('/maskRadio');
+          let div = {content:
+          `<div class="alert alert-success">
+            <strong>Successful Registration !</strong> Now Sign in!.
+          </div>
+          `}
+          return res.send(signin(div));
         })
       }else{
         let div = {content:`
         <div class="alert alert-danger">
-          <strong>Warning!</strong> Username already exists.
+          <strong>Warning!</strong> Username already exists!
         </div>
         `
         }
