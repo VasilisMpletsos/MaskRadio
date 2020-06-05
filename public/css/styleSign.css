@@ -119,3 +119,19 @@ a:link {
 a:hover {
   color: white;
 }
+
+.alert-danger{
+  display:table-cell;
+  color: #ffffff;
+  background-color: #af0c0cc9;
+  border-style: none;
+  border-radius: 5px;
+}
+
+.center{
+  margin: auto;
+  text-align: center;
+  display: table;
+  margin-bottom: 5%;
+  width:80%;
+}

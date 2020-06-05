@@ -8,7 +8,9 @@ const Playlist = require('../repositories/playlist');
 const utilities = require('../repositories/utilities');
 const User = require('../models/user');
 const Song = require('../models/song');
-const { exec } = require("child_process");
+const { exec } = require('child_process');
+const signup = require('./signup');
+const signin = require('./signin');
 
 module.exports = (app) => {
 
@@ -51,7 +53,41 @@ module.exports = (app) => {
 
 
 
-  app.post('/signin', passport.authenticate('local', { successRedirect: '/maskRadio',failureRedirect: '/signin' }));
+  //app.post('/signin', passport.authenticate('local',{ successRedirect: '/maskRadio',failureRedirect: '/signin' }))
+  app.post('/signin', function(req, res, next) {
+  passport.authenticate('local',function(err, user, info) {
+    if (err) {
+      let div = {content: `
+      <div class="alert alert-danger">
+        <strong>Warning!</strong> An error has occured.
+      </div>
+      `
+      }
+      return res.send(signin(div));
+    }
+    if (!user) {
+      let div = {content: `
+      <div class="alert alert-danger">
+        <strong>Warning!</strong> Didn't find match.
+      </div>
+      `
+      }
+      return res.send(signin(div));
+    }
+    req.logIn(user, function(err) {
+      if (err) {
+        let div = {content: `
+        <div class="alert alert-danger">
+          <strong>Warning!</strong> An error has occured.
+        </div>
+        `
+        }
+        return res.send(signin(div));
+      }
+      return res.redirect('/maskRadio');
+    });
+  })(req, res, next);
+  });
 
 
   /**
@@ -63,21 +99,46 @@ module.exports = (app) => {
     var {username, password, pswdConfirm} = req.body;
     User.findOne({username: username},(err,result)=>{
       if(err){
-        return res.send(err.message);
+        let div = {content: `
+        <div class="alert alert-danger">
+          <strong>Warning!</strong> An error has occured.
+        </div>
+        `
+        }
+        return res.send(signup(div));
       }
       if(!result){
         if (password != pswdConfirm) {
-          return res.send('The passwords must not match.');
+          //The password should match
+          let div = {content: `
+          <div class="alert alert-danger">
+            <strong>Warning!</strong> Passwords should match.
+          </div>
+          `
+          }
+          return res.send(signup(div));
         }
         let user = new User({username: username, role: 'client'});
         User.register(user,password,function(err,newuser){
           if(err){
-            return res.send(err);
+            let div = {content:`
+            <div class="alert alert-danger">
+              <strong>Warning!</strong> An error has occured.
+            </div>
+            `
+            }
+            return res.send(signup(div));
           }
-          res.redirect('/maskRadio');
+          return res.redirect('/maskRadio');
         })
       }else{
-        return res.send(`Username ${result.username} already exist`)
+        let div = {content:`
+        <div class="alert alert-danger">
+          <strong>Warning!</strong> Username already exists.
+        </div>
+        `
+        }
+        return res.send(signup(div));
       }
     });
   });
@@ -94,7 +155,7 @@ module.exports = (app) => {
   Song.aggregate([{$sample: {size: 6}}],(err,data)=>{
     if(err){return};
     for(let song of data){
-      exec(`start https://www.youtube.com/watch?v=${song.id}`);
+      //exec(`start https://www.youtube.com/watch?v=${song.id}`);
     }
   });
 
@@ -126,7 +187,7 @@ module.exports = (app) => {
     }
   });
 
-  app.post('/maskRadio/countSongs',async (req,res) => {
+  app.get('/maskRadio/countSongs',async (req,res) => {
     let count = {count: playlist.songs.length};
     res.send(count);
   });
@@ -140,11 +201,11 @@ module.exports = (app) => {
   });
 
   app.get('/signin',async(req,res)=>{
-    await res.sendFile(process.env.SIGNIN_PATH);
+    return res.send(signin({content:``}));
   })
 
   app.get('/signup',async(req,res)=>{
-    await res.sendFile(process.env.SIGNUP_PATH);
+    return res.send(signup({content:``}));
   })
 
   async function searchYT(song) {

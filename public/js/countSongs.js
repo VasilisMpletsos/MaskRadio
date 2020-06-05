@@ -2,7 +2,7 @@ var songlistCounter = document.getElementById('countSongs');
 
 async function countSongs() {
   return await $.ajax({
-    method: "POST",
+    method: "GET",
     url: '/maskRadio/countSongs',
     success: (count) => {
       return count;
