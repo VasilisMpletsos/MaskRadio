@@ -50,7 +50,6 @@ module.exports = ({content})=>{
             </center>
           </div>
         </div>
-        <script src="js/sign.js"></script>
       </body>
   </html>
   `

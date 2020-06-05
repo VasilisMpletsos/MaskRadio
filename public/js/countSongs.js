@@ -31,4 +31,4 @@ function displayCountSongs(songlistCounter){
 }
 
 displayCountSongs(songlistCounter);
-setInterval(displayCountSongs, 10000,songlistCounter);
+setInterval(displayCountSongs, 9000,songlistCounter);

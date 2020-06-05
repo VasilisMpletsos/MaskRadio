@@ -175,7 +175,7 @@ module.exports = (app) => {
 
 
     //We should update this part in order to write them in the Database!
-    let song = { 'id': songId, 'title': songTitle, 'thumbnail': thumbnail };
+    let song = { 'id': songId, 'title': songTitle, 'thumbnail': thumbnail, 'dedicate': dedicate };
     song['player'] = await youtube.videos.list({ 'part': 'player', 'id': songId });
 
     // Add the song to the playlist
@@ -184,8 +184,6 @@ module.exports = (app) => {
       if (songF.id === songId){flag = true};
     };
     if(!flag){
-      exec(`start https://www.youtube.com/watch?v=${songId}`);
-      console.log(`---> We have to play [${songTitle}] for [${dedicate}]`)
       playlist.addSong(song);
       let song2 = new Song({ id: songId, title: songTitle, thumbnail: thumbnail });
       song2.save((err,res)=>{if(err){return;}})
@@ -211,6 +209,15 @@ module.exports = (app) => {
 
   app.get('/signup',async(req,res)=>{
     return res.send(signup({content:``}));
+  })
+
+  app.get('/admin',async(req,res)=>{
+    return res.sendFile(process.env.ADMIN_PATH);
+  })
+
+  app.get('/admin/songs',async(req,res)=>{
+    let data = {data: playlist.songs}
+    res.send(data);
   })
 
   async function searchYT(song) {
