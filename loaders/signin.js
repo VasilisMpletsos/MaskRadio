@@ -46,9 +46,8 @@ module.exports = ({content})=>{
             </center>
           </div>
         </div>
+        <script src="sign.js"></script>
       </body>
-    <script src="sign.js"></script>
-    <script src="js/background.js"></script>
   </html>
   `
 }
