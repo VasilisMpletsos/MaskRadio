@@ -55,5 +55,5 @@ async function displaySongs(songlist){
   )
 }
 
-await displaySongs(songList);
+displaySongs(songList);
 setInterval(displaySongs, 5000,songList);
