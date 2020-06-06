@@ -63,7 +63,7 @@ module.exports = (app) => {
       </div>
       `
       }
-      return await res.send(signin(div));
+      return res.send(await signin(div));
     }
     if (!user) {
       let div = {content: `
@@ -72,7 +72,7 @@ module.exports = (app) => {
       </div>
       `
       }
-      return await res.send(signin(div));
+      return res.send(await signin(div));
     }
     req.logIn(user, async function(err) {
       if (err) {
@@ -82,9 +82,9 @@ module.exports = (app) => {
         </div>
         `
         }
-        return await res.send(signin(div));
+        return res.send( await signin(div));
       }
-      await res.redirect('/maskRadio');
+      res.redirect('/maskRadio');
     });
   })(req, res, next);
   });
@@ -105,7 +105,7 @@ module.exports = (app) => {
         </div>
         `
         }
-        return await res.send(signup(div));
+        return res.send(await signup(div));
       }
       if(!result){
         if (password != pswdConfirm) {
@@ -116,7 +116,7 @@ module.exports = (app) => {
           </div>
           `
           }
-          return await res.send(signup(div));
+          return res.send(await signup(div));
         }
         let user = new User({username: username, role: 'client'});
         User.register(user,password,async function(err,newuser){
@@ -127,14 +127,14 @@ module.exports = (app) => {
             </div>
             `
             }
-            return await res.send(signup(div));
+            return res.send(await signup(div));
           }
           let div = {content:
           `<div class="alert alert-success">
             <strong>Successful Registration !</strong> Now Sign in!.
           </div>
           `}
-          return await res.send(signin(div));
+          return res.send(await signin(div));
         })
       }else{
         let div = {content:`
@@ -152,7 +152,7 @@ module.exports = (app) => {
   app.post('/maskRadio/search',async (req,res) => {
     const {song} = req.body;
     songsData = await searchYT(song);
-    await res.send(songsData);
+    res.send(songsData);
   });
 
   // Open 4 random songs when start server in order to play until
@@ -194,32 +194,32 @@ module.exports = (app) => {
 
   app.get('/maskRadio/countSongs',async (req,res) => {
     let count = {count: playlist.songs.length};
-    await res.send(count);
+    res.send(count);
   });
 
   app.get('/maskRadio', async(req, res) => {
     if(req.isAuthenticated()){
-        await res.sendFile(process.env.MASKRADIO_PATH);
+      res.sendFile(process.env.MASKRADIO_PATH);
     }else{
-      await res.redirect('/signin');
+      res.redirect('/signin');
     }
   });
 
   app.get('/signin',async(req,res)=>{
-    await res.send(signin({content:``}));
+    res.send( await signin({content:``}));
   })
 
   app.get('/signup',async(req,res)=>{
-    await res.send(signup({content:``}));
+    res.send(await signup({content:``}));
   })
 
   app.get('/admin',async(req,res)=>{
-    await res.sendFile(process.env.ADMIN_PATH);
+    res.sendFile(process.env.ADMIN_PATH);
   })
 
   app.get('/admin/songs',async(req,res)=>{
     let data = {data: playlist.songs}
-    await res.send(data);
+    res.send(data);
   })
 
   async function searchYT(song) {

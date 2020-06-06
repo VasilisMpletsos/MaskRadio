@@ -1,4 +1,4 @@
-module.exports = ({content})=>{
+module.exports = async ({content})=>{
   return `
   <!DOCTYPE html>
   <html>
