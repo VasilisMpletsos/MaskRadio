@@ -33,13 +33,13 @@ module.exports = (app) => {
   app.use(helmet());
 
   //Protecting against ddos attacks
-  var ddos = new Ddos({burst:50, limit:100})
+  var ddos = new Ddos({burst:500, limit:2000})
   app.use(ddos.express);
 
   //Limiting Requests
   const limiter = rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
-    max: 1000, // limit each IP to 1000 requests per windowMs
+    max: 50000, // limit each IP to 10000 requests per windowMs
     message:"Too many attempts from this IP, please try again after 10 minutes"
   });
   app.use(limiter);
@@ -54,8 +54,8 @@ module.exports = (app) => {
 
 
   //app.post('/signin', passport.authenticate('local',{ successRedirect: '/maskRadio',failureRedirect: '/signin' }))
-  app.post('/signin', function(req, res, next) {
-  passport.authenticate('local',function(err, user, info) {
+  app.post('/signin', async function(req, res, next) {
+  passport.authenticate('local',async function(err, user, info) {
     if (err) {
       let div = {content: `
       <div class="alert alert-danger">
@@ -63,7 +63,7 @@ module.exports = (app) => {
       </div>
       `
       }
-      return res.send(signin(div));
+      return await res.send(signin(div));
     }
     if (!user) {
       let div = {content: `
@@ -72,9 +72,9 @@ module.exports = (app) => {
       </div>
       `
       }
-      return res.send(signin(div));
+      return await res.send(signin(div));
     }
-    req.logIn(user, function(err) {
+    req.logIn(user, async function(err) {
       if (err) {
         let div = {content: `
         <div class="alert alert-danger">
@@ -82,9 +82,9 @@ module.exports = (app) => {
         </div>
         `
         }
-        return res.send(signin(div));
+        return await res.send(signin(div));
       }
-      return res.redirect('/maskRadio');
+      await res.redirect('/maskRadio');
     });
   })(req, res, next);
   });
@@ -97,7 +97,7 @@ module.exports = (app) => {
    */
   app.post('/signup',async (req, res) => {
     var {username, password, pswdConfirm} = req.body;
-    User.findOne({username: username},(err,result)=>{
+    User.findOne({username: username},async (err,result)=>{
       if(err){
         let div = {content: `
         <div class="alert alert-danger">
@@ -105,7 +105,7 @@ module.exports = (app) => {
         </div>
         `
         }
-        return res.send(signup(div));
+        return await res.send(signup(div));
       }
       if(!result){
         if (password != pswdConfirm) {
@@ -116,10 +116,10 @@ module.exports = (app) => {
           </div>
           `
           }
-          return res.send(signup(div));
+          return await res.send(signup(div));
         }
         let user = new User({username: username, role: 'client'});
-        User.register(user,password,function(err,newuser){
+        User.register(user,password,async function(err,newuser){
           if(err){
             let div = {content:`
             <div class="alert alert-danger">
@@ -127,14 +127,14 @@ module.exports = (app) => {
             </div>
             `
             }
-            return res.send(signup(div));
+            return await res.send(signup(div));
           }
           let div = {content:
           `<div class="alert alert-success">
             <strong>Successful Registration !</strong> Now Sign in!.
           </div>
           `}
-          return res.send(signin(div));
+          return await res.send(signin(div));
         })
       }else{
         let div = {content:`
@@ -143,7 +143,7 @@ module.exports = (app) => {
         </div>
         `
         }
-        return res.send(signup(div));
+        return await res.send(signup(div));
       }
     });
   });
@@ -152,7 +152,7 @@ module.exports = (app) => {
   app.post('/maskRadio/search',async (req,res) => {
     const {song} = req.body;
     songsData = await searchYT(song);
-    res.send(songsData);
+    await res.send(songsData);
   });
 
   // Open 4 random songs when start server in order to play until
@@ -160,7 +160,7 @@ module.exports = (app) => {
   Song.aggregate([{$sample: {size: 6}}],(err,data)=>{
     if(err){return};
     for(let song of data){
-      //exec(`start https://www.youtube.com/watch?v=${song.id}`);
+      exec(`start https://www.youtube.com/watch?v=${song.id}`);
     }
   });
 
@@ -184,6 +184,8 @@ module.exports = (app) => {
       if (songF.id === songId){flag = true};
     };
     if(!flag){
+      // If you want to be opened instantly
+      // exec(`start https://www.youtube.com/watch?v=${songF.id}`);
       playlist.addSong(song);
       let song2 = new Song({ id: songId, title: songTitle, thumbnail: thumbnail });
       song2.save((err,res)=>{if(err){return;}})
@@ -192,32 +194,32 @@ module.exports = (app) => {
 
   app.get('/maskRadio/countSongs',async (req,res) => {
     let count = {count: playlist.songs.length};
-    res.send(count);
+    await res.send(count);
   });
 
   app.get('/maskRadio', async(req, res) => {
     if(req.isAuthenticated()){
         await res.sendFile(process.env.MASKRADIO_PATH);
     }else{
-      res.redirect('/signin');
+      await res.redirect('/signin');
     }
   });
 
   app.get('/signin',async(req,res)=>{
-    return res.send(signin({content:``}));
+    await res.send(signin({content:``}));
   })
 
   app.get('/signup',async(req,res)=>{
-    return res.send(signup({content:``}));
+    await res.send(signup({content:``}));
   })
 
   app.get('/admin',async(req,res)=>{
-    return res.sendFile(process.env.ADMIN_PATH);
+    await res.sendFile(process.env.ADMIN_PATH);
   })
 
   app.get('/admin/songs',async(req,res)=>{
     let data = {data: playlist.songs}
-    res.send(data);
+    await res.send(data);
   })
 
   async function searchYT(song) {

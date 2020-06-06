@@ -56,4 +56,4 @@ function displaySongs(songlist){
 }
 
 displaySongs(songList);
-setInterval(displaySongs, 10000,songList);
+setInterval(displaySongs, 5000,songList);
