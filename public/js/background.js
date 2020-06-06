@@ -1,4 +1,4 @@
-function randomImage(){
+async function randomImage(){
 const background = {
     back1: 'RnCPiXixooY',
     back2: 'k0rVudBoB4c',
@@ -41,12 +41,12 @@ const background = {
   const length = Object.keys(background).length;
   const number = Math.floor((Math.random() * length + 1));
   const back = 'back' + number;
-  return background[back];
+  return await background[back];
 }
 
 //Choosing a random background
-function getBackground(){
-  const back = randomImage();
+async function getBackground(){
+  const back = await randomImage();
   document.body.style = `background-image: url("https://source.unsplash.com/${back}")`;
 }
 

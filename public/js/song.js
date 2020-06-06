@@ -4,7 +4,7 @@
  * Displays the new song list. When the user clicks on a song,
  * it is added to the userPlaylist and the song list disappears.
  */
-$('#songF').submit(e => {
+$('#songF').submit(async e => {
   e.preventDefault();
 
   // Get the data from the form.
@@ -15,10 +15,10 @@ $('#songF').submit(e => {
     dedicate.value = '-';
   }
 
-  let songlistContainer = resetSonglistContainer(0);
+  let songlistContainer = await resetSonglistContainer(0);
 
-  searchSong(song.value).then(songsData => {
-    displaySonglist(songlistContainer, songsData);
+  await searchSong(song.value).then(async (songsData) => {
+    await displaySonglist(songlistContainer, songsData);
   });
 });
 
@@ -31,14 +31,14 @@ $('#songF').submit(e => {
  * @returns {object} songlistContainer - The empty html element where the new
  * song list will be displayed.
  */
-function resetSonglistContainer(deleteContentInMS) {
+async function resetSonglistContainer(deleteContentInMS) {
   var songlistContainer = document.getElementById('songlistContainer');
 
   songlistContainer.style.opacity = 0;
   setTimeout(() => {
     songlistContainer.innerHTML = '';
   }, deleteContentInMS)
-  return songlistContainer;
+  return await songlistContainer;
 }
 
 
@@ -68,7 +68,7 @@ async function searchSong(song) {
  * @param {array} songsData - Contains the id, title and thumbnail of the songs
  * to be displayed.
  */
-function displaySonglist(songlistContainer, songsData) {
+async function displaySonglist(songlistContainer, songsData) {
 
   songlistContainer.style.opacity = 1; // render the UI visible.
 
@@ -94,11 +94,11 @@ function displaySonglist(songlistContainer, songsData) {
     row.appendChild(songTitle);
     songlistContainer.appendChild(row);
 
-    row.addEventListener('click', () => {
-      [songTyped, dedicate] = getFormAndReset();
-      notifyUserDialog(song['title'], dedicate);
+    row.addEventListener('click', async () => {
+      [songTyped, dedicate] = await getFormAndReset();
+      await notifyUserDialog(song['title'], dedicate);
       addToPlaylist(song['id'], song['title'], song['thumbnail'], dedicate);
-      resetSonglistContainer(1000);
+      await resetSonglistContainer(1000);
     })
   });
 }
@@ -108,14 +108,14 @@ function displaySonglist(songlistContainer, songsData) {
  * The function retrieves the form input values and then resets the form.
  * @returns {array} - Contains the typed song title and the dedication of the song.
  */
-function getFormAndReset() {
+async function getFormAndReset() {
   let songForm = document.getElementById('songField');
   let dedicateForm = document.getElementById('forField');
   songTyped = songForm.value;
   dedicate = dedicateForm.value;
   songForm.value='';
   dedicateForm.value='';
-  return [songTyped, dedicate];
+  return await [songTyped, dedicate];
 }
 
 
@@ -125,7 +125,7 @@ function getFormAndReset() {
  * @param {string} song - The form input field,the title of the song
  * @param {string} dedicate - The person to whom the song is dedicated to.
  */
-function notifyUserDialog(song, dedicate) {
+async function notifyUserDialog(song, dedicate) {
   let notifyDialog = document.getElementById('notify');
   let msgText = document.createElement('div');
   let fadeInMS = 5000;
@@ -147,13 +147,13 @@ function notifyUserDialog(song, dedicate) {
  * @param {string} songTitle - The exact title of the song.
  * @param {string} dedicate - The person to whom the song is dedicated to.
  */
-function addToPlaylist(songId, songTitle, thumbnail, dedicate) {
-  $.ajax({
+async function addToPlaylist(songId, songTitle, thumbnail, dedicate) {
+  return await $.ajax({
     method: "POST",
     url: '/maskRadio/addToPlaylist',
     data: {songId:songId, songTitle: songTitle, thumbnail: thumbnail, dedicate: dedicate},
     success: suc => {
-      console.log(suc)
+      console.log(suc);
     }
   });
 }

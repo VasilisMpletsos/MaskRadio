@@ -10,8 +10,8 @@ function typeTitle(_callback) {
   }
 }
 
-function waitTitle(){
-  setTimeout(typeTitle,1500);
+async function waitTitle(){
+  setTimeout(await typeTitle,1500);
 }
 
 waitTitle();

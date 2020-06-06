@@ -160,7 +160,7 @@ module.exports = (app) => {
   Song.aggregate([{$sample: {size: 6}}],(err,data)=>{
     if(err){return};
     for(let song of data){
-      exec(`start https://www.youtube.com/watch?v=${song.id}`);
+      //exec(`start https://www.youtube.com/watch?v=${song.id}`);
     }
   });
 

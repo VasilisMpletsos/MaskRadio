@@ -6,38 +6,38 @@ var txt2 = 'Dedicate to someone?'; /* The text */
 var speed = 65; /* The speed/duration of the effect in milliseconds */
 var w = window.innerWidth;
 
-function typeSong(_callback) {
+async function typeSong(_callback) {
   if (i < txt.length) {
     document.getElementById("songField").placeholder += txt.charAt(i);
     i++;
-    setTimeout(typeSong, speed);
+    setTimeout(await typeSong, speed);
   }else{
     ended='true'
   }
 }
 
-function typeFor() {
+async function typeFor() {
   if (j < txt2.length) {
     document.getElementById("forField").placeholder += txt2.charAt(j);
     j++;
-    setTimeout(typeFor, speed);
+    setTimeout(await typeFor, speed);
   }
 }
 
-function runTyping(){
-  typeSong();
-  function wait(){
+async function runTyping(){
+  await typeSong();
+  async function wait(){
       if(ended==='false'){
-        setTimeout(wait, 100);
+        setTimeout(await wait, 100);
       }else{
-        typeFor();
+        await typeFor();
       }
   }
-  wait();
+  await wait();
 }
 
-function waitPosition(){
-  document.getElementById("section3").addEventListener("mouseover", runTyping);
+async function waitPosition(){
+  document.getElementById("section3").addEventListener("mouseover", await runTyping);
 }
 
 waitPosition();

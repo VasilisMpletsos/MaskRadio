@@ -12,8 +12,8 @@ async function countSongs() {
 
 var countPrevious = 0;
 
-function displayCountSongs(songlistCounter){
-  countSongs().then((count)=>{
+async function displayCountSongs(songlistCounter){
+  await countSongs().then((count)=>{
     let countSong = count.count;
     if(countPrevious !== countSong){
       songlistCounter.style.opacity = 0;

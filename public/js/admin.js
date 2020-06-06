@@ -17,8 +17,8 @@ async function getSongs() {
 
 var previousSongs = [];
 
-function displaySongs(songlist){
-  getSongs().then((data)=>{
+async function displaySongs(songlist){
+  await getSongs().then((data)=>{
     if(previousSongs.length!==data.data.length){
       start = previousSongs.length;
       end = data.data.length;
@@ -55,5 +55,5 @@ function displaySongs(songlist){
   )
 }
 
-displaySongs(songList);
+await displaySongs(songList);
 setInterval(displaySongs, 5000,songList);
