@@ -1,85 +1,43 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Mask Radio</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <head>
+      <title>Mask Radio</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-        <!-- Monsterrat Font Family -->
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+      <!-- Monsterrat Font Family -->
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 
-        <link rel='icon' href='./images/favicon.png' type='image/png'/>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-    </head>
+      <!-- Favicon -->
+      <link rel="icon" href="./images/favicon.png" type="image/png"/>
+      <!-- Custom Stylesheets -->
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
 
-<body data-spy="scroll" data-offset="50">
-  <div id="root"></div>
+  <body data-spy="scroll" data-offset="50">
+    <div id="root"></div>
 
-      <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-        <img class="mask-icon" src="images/signal.png"/>
-        <a class="navbar-brand" href="#">Mask Radio</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+    <div id="content">
+      <audio controls src="https://stream.zenolive.com/dz9z5w7u5yzuv.aac"></audio>
+    </div>
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="#section1">
-                  <svg class="bi bi-house-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z" clip-rule="evenodd"/>
-                  <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/>
-                  </svg> Home
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#section2">
-                  <svg class="bi bi-chat-dots-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 01-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM5 8a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
-                  </svg> Chat
-                </a>
-              </li>
-              <li><a class="nav-link" href="#section3">
-                <svg class="bi bi-box-arrow-right" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M11.646 11.354a.5.5 0 010-.708L14.293 8l-2.647-2.646a.5.5 0 01.708-.708l3 3a.5.5 0 010 .708l-3 3a.5.5 0 01-.708 0z" clip-rule="evenodd"/>
-                  <path fill-rule="evenodd" d="M4.5 8a.5.5 0 01.5-.5h9a.5.5 0 010 1H5a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
-                  <path fill-rule="evenodd" d="M2 13.5A1.5 1.5 0 01.5 12V4A1.5 1.5 0 012 2.5h7A1.5 1.5 0 0110.5 4v1.5a.5.5 0 01-1 0V4a.5.5 0 00-.5-.5H2a.5.5 0 00-.5.5v8a.5.5 0 00.5.5h7a.5.5 0 00.5-.5v-1.5a.5.5 0 011 0V12A1.5 1.5 0 019 13.5H2z" clip-rule="evenodd"/>
-                </svg> Send Song
-              </a></li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item"><a class="nav-link" href="">
-                <svg class="bi bi-stopwatch-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M5.5.5A.5.5 0 016 0h4a.5.5 0 010 1H9v1.07A7.002 7.002 0 018 16 7 7 0 017 2.07V1H6a.5.5 0 01-.5-.5zm3 4.5a.5.5 0 00-1 0v3.5h-3a.5.5 0 000 1H8a.5.5 0 00.5-.5V5z" clip-rule="evenodd"/>
-                </svg> Timer
-              </a></li>
-              <li class="nav-item"><a class="nav-link"><b><span style="color: #d6b3d6;" id="hours">00</span>:<span id="minutes" style="color: #d6b3d6;">00</span>:<span id="seconds" style="color: #d6b3d6;">00</span></b></a></li>
-            <li id='LoginMenu'></li>
-            </ul>
-          </div>
-      </nav>
-
-      <div id="content">
-        <audio controls src="https://stream.zenolive.com/dz9z5w7u5yzuv.aac"></audio>
+    <div id="section1" class="container">
+      <div class="center">
+        <h1>Καλωσορίσατε στο <b>Mask Radio</b></h1>
+        <p>Ελπίζουμε να σας ταξιδέψουμε με τις μελωδίες μας και να γίνουμε μια όμορφη παρέα!
+          Μπορείτε να στείλετε τα τραγούδια σας απο την <b><a href="#section3">ειδική φόρμα αποστολής τραγουδιών</a></b>.</p>
+        <br><center>
+          <a href="https://www.facebook.com/Mask-Radio-105310681185250/" class="fa fa-facebook social-button" target="_blank"></a>
+          <a href="https://www.instagram.com/maskradiogreece/" class="fa fa-instagram social-button" target="_blank"></a>
+        </center>
       </div>
-
-      <div id="section1" class="container">
-        <div class="center">
-          <h1>Καλωσορίσατε στο <b id="titleName"></b></h1>
-          <p>Ελπίζουμε να σας ταξιδέψουμε με τις μελωδίες μας και να γίνουμε μια όμορφη παρέα!
-            Μπορείτε να στείλετε τα τραγούδια σας απο την <b><a href="#section3">ειδική φόρμα αποστολής τραγουδιών</a></b>.</p>
-          <br><center>
-            <a id="facebook" href="https://www.facebook.com/Mask-Radio-105310681185250/" class="fa fa-facebook" target="_blank"></a>
-            <a id="instagram" href="https://www.instagram.com/maskradiogreece/" class="fa fa-instagram" target="_blank"></a>
-          </center>
-        </div>
-      </div>
+    </div>
 
 
       <div id="section2" class="container-fluid">
@@ -127,13 +85,7 @@
 
       <script src="js/song.js"></script>
       <script src="js/size.js"></script>
-      <script src="js/background.js"></script>
-      <script src="js/rotate.js"></script>
-      <script src="js/timer.js"></script>
       <script src="js/typeEffect.js"></script>
-      <script src="js/titleEffect.js"></script>
-      <script type="module" src="js/user.js"></script>
-      <script type="module" src="js/user-utils.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     </body>

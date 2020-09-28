@@ -21,11 +21,11 @@ router.route('/')
 
   .post((req, res) => {
     const { username, password } = req.body;
-
+    
     const user = new User({username: username, role:'client'});
     User.register(user, password)
       .then( user => {
-        passport.authenticate('local', function(err, user, info) {
+        passport.authenticate('local', (err, user, info) => {
           if (err) return res.json(err);
           if (!user) return res.json(info);
           req.logIn(user, function(err) {

@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
  * The generic menu button component. Currently, it is the top component in the
  * hierarchy, so it is responsible for managing the user loggedin state as well
  * as the snackbar. These states/handlers are passed (as context) to the menu's
- * children, the login menu and the profile menu. Only one of these components
+ * children, the 'login menu' and the 'profile menu'. Only one of these components
  * will be displayed depending on the user loggedin state.
  */
 export default function NavbarMenu() {

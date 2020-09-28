@@ -32,11 +32,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-/* TODO: Separate the 2 forms to different components and handle them through
- * useReducer and the parent of the forms!
- * The LoginForm compoment implements both the Login and/or Register of the user.
+/* The LoginForm compoment implements both the Login and/or Register of the user.
  * The 2 separate states are dictated by the boolean state variable 'login'.
  * Depending on the state, the form displayes the appropriate fields.
+ * TODO: Separate the 2 forms to different components and handle them via the parent
+ * component using useReducer
  */
 export default function LoginForm(props) {
   const classes = useStyles();
@@ -65,20 +65,20 @@ export default function LoginForm(props) {
   }
 
   /* The submitForm function implements both the login and the register requests.
-   * The 'login' state variable dictates the required action. In both cases a post
-   * request is made to the server with the user info. Depending on the server's
+   * In both cases a post request is made to the server with the user info. Depending on the server's
    * response, appropriate errors or success messages are displayed.
    */
   function submitForm() {
 
     setError({status: false, target:'', msg: ''}); // reset previous errors
+
     if (!login && formData.password !== formData.pswdConfirm) {
       setError({status: true, target:'pswdConfirm', msg: 'The passwords do not match'});
       return;
     }
 
-    const uri = login ? 'http://localhost:5000/users/login' : 'http://localhost:5000/users';
-
+    let uri = window.location.origin;
+    uri +=  login ? '/users/login' : '/users';
     axios.post(uri, formData)
       .then(res => {
         // The user has successfully loggedin or registered.

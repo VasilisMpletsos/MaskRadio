@@ -25,8 +25,8 @@ $('#songForm').submit(e => {
 
 /**
  * Resets the user interface of the search song list. Firstly, starts the fading
- * and when the list has disappeared, it is emptied from content.
- * @param {int} deleteContentInMS - The seconds after which the contents of the
+ * and when the list has disappeared, the content is deleted.
+ * @param {float} deleteContentInMS - The seconds after which the contents of the
  * container will be deleted.
  * @returns {object} songlistContainer - The empty html element where the new
  * song list will be displayed.
@@ -51,7 +51,7 @@ function resetSonglistContainer(deleteContentInMS) {
 async function searchSong(song) {
   return await $.ajax({
     method: "POST",
-    url: '/maskRadio/search',
+    url: '/songs/search',
     data: {song: song},
     success: songsData => {
       return songsData;
@@ -90,7 +90,12 @@ function displaySonglist(songlistContainer, songsData) {
 
     let songTitle = document.createElement('div');
     songTitle.setAttribute('class', 'col-xs-8 vertical-align');
-    songTitle.innerText = song['title'].substring(0,45) + '...';
+    if (song['title'].length > 45) {
+      songTitle.innerText = song['title'].substring(0,45) + '...';
+    } else {
+      songTitle.innerText = song['title'];
+    }
+
     row.appendChild(songTitle);
     songlistContainer.appendChild(row);
 
@@ -142,7 +147,7 @@ function notifyUserDialog(song, dedicate) {
 }
 
 /**
- * Sends to the server the exact song that has to be added to the userPlaylist.
+ * Sends to the server the exact song that has to be added to the playlist.
  * @param {string} songId - The unique identifier of the video.
  * @param {string} songTitle - The exact title of the song.
  * @param {string} dedicate - The person to whom the song is dedicated to.
@@ -150,7 +155,7 @@ function notifyUserDialog(song, dedicate) {
 function addToPlaylist(songId, songTitle, thumbnail, dedicate) {
   $.ajax({
     method: "POST",
-    url: '/maskRadio/addToPlaylist',
+    url: '/songs/addToPlaylist',
     data: {songId:songId, songTitle: songTitle, thumbnail: thumbnail, dedicate: dedicate},
     success: suc => {
       console.log(suc)

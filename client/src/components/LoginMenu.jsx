@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.third.main,
     marginTop: theme.spacing(2)
   },
+  divider: {
+    margin: theme.spacing(1)
+  }
 }));
 
 /*
@@ -77,7 +80,7 @@ export default function LoginMenu(props) {
                   <MenuItem className={classes.loginForm} disableTouchRipple>
                     <LoginForm closeMenu={handleClose} />
                   </MenuItem>
-                  <Divider />
+                  <Divider className={classes.divider}/>
                   <OtherLoginOptions />
                 </MenuList>
               </ClickAwayListener>

@@ -6,8 +6,3 @@ exports.getDate = () => {
   today = dd + '/' + mm + '/' + yyyy;
   return today;
 }
-
-exports.parseHTML = (HTMLstring) => {
-  parsedString = HTMLstring.replace(/&quot;/g,'"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
-  return parsedString;
-}

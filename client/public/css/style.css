@@ -8,14 +8,16 @@ audio {
 }
 
 body{
-  background-size:cover;
-  background-color: #2d2b94;
-  background-repeat: no-repeat;
-  position: relative;
+  background: rgb(67,73,147);
+  background: radial-gradient(circle, 
+  rgba(67,73,147,1) 0%, rgba(167,145,205,1) 20%,
+  rgba(67,73,147,1) 40%, rgba(167,145,205,1) 60%, 
+  rgba(67,73,147,1) 80%, rgba(167,145,205,1) 100%);
 }
 
 html{
   font-family: serif;
+  scroll-behavior: smooth;
 }
 
 h1{
@@ -32,9 +34,22 @@ iframe.chat{
   color: white;
 }
 
+/* Landing Page Section */
 #section1 {
   color: white;
   margin: auto;
+}
+
+.social-button:hover {
+  transition: transform 0.8s ease-out;
+}
+
+.social-button:hover {
+  transform: rotate(360deg);
+}
+
+@keyframes spin {
+  to {transform: rotate(360deg)}
 }
 
 #section2 {
